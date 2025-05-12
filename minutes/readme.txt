@@ -1,0 +1,1 @@
+You should put your minute documents into this folder!

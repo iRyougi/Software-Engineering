@@ -1,0 +1,1 @@
+You should put your design documents into this folder!

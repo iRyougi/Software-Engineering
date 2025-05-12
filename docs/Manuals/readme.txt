@@ -1,0 +1,1 @@
+You should put your Manuals documents into this folder!

@@ -1,0 +1,1 @@
+You should put your Specifications documents into this folder!
