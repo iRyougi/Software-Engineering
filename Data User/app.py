@@ -12,7 +12,7 @@ DB_CONFIG = {
     'password': '',  
     'database': 'testdb'
 }
-
+1
 data_operation = DataUser(DB_CONFIG)
 pay_operation = Pay(DB_CONFIG)
 
