@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VIP Service</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to VIP Service!</h1>
+    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+    <h2>VIP User Options:</h2>
+    <a href="{{ url_for('browselog', username = username) }}">Browse LOG</a><br>
+    <a href="{{ url_for('browsebankaccount', username = username) }}">Browse Bank Account</a><br>
+    <h2>Otherwise:</h2>
+    <a href="{{ url_for('datauser', username=username) }}">Back to Home</a>
+</body>
+</html>
