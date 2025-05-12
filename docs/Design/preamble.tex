@@ -1,0 +1,76 @@
+\documentclass[12pt]{scrreprt}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage[english]{babel}
+\usepackage{scrlayer-scrpage}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage[utf8]{inputenc}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}    % 允许子图使用 caption
+\usepackage{subcaption} 
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{parskip}           % 段落间距
+\setlength{\parskip}{0.5em}    % 紧凑段落间距
+\renewcommand{\baselinestretch}{1.05} % 行距微调
+
+% main.tex导言区
+\usepackage{titlesec}
+\titleformat{\chapter}[block]
+{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+\titleformat{\section}[block]
+{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]
+{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+% 保持编号与标题的经典间距
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\quad}
+\makeatother
+
+% 现代间距系统（单位：pt）
+\titlespacing*{\chapter}{0pt}{25pt}{15pt}  % 上间距25pt/下间距15pt
+\titlespacing*{\section}{0pt}{15pt}{7pt}
+\titlespacing*{\subsection}{0pt}{10pt}{5pt}
+
+% 确保子章节编号
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3} % 目录显示到三级标题
+
+% 封面字体优化
+\usepackage{anyfontsize}        % 精确字体控制
+\usepackage[sfdefault]{noto}   % 现代无衬线字体（需要安装Noto Sans字体）
+
+%refers
+\usepackage[style=ieee, sorting=none, backend=biber]{biblatex}
+\addbibresource{re.bib}
+
+% Hyperref配置
+\hypersetup{
+    pdftitle={Software Requirement Specification},
+    pdfauthor={Jean-Philippe Eisenbarth},
+    pdfsubject={TeX and LaTeX},
+    pdfkeywords={TeX, LaTeX, SRS, Requirements},
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!60!black,
+    filecolor=magenta,
+    urlcolor=cyan!70!black,
+    linktoc=page
+}
+
+% 全局格式设置
+\setstretch{1.1}
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-30pt}{40pt}
+
+% 自定义命令
+\newcommand{\placeholder}[1]{\textcolor{gray!70}{\textlangle\,\textit{#1}\,\textrangle}}
+\newcommand{\req}[2]{\item[REQ-#1:] #2}
