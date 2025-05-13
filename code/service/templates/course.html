@@ -42,7 +42,7 @@
     <script>
         // Load courses
         function loadCourses() {
-            fetch('/courses')
+            fetch('/api/courses')
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
