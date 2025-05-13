@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from course_configuration import Course_configuration
 import mysql.connector
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 DB_CONFIG = {
     'host': 'localhost',
@@ -18,9 +18,12 @@ def get_db_connection(self):
 
 @app.route('/')
 def index():
-    return render_template('course.html')
+    return render_template('index.html')#5.13 进行过修改 把flask变成渲染主页
 
 @app.route('/courses', methods=['GET'])
+def course_page():
+    return render_template('course.html')#5.13 新增渲染课程管理页面
+@app.route('/api/courses', methods=['GET'])
 def get_courses():
     try:
         courses = data_operation.get_all_courses()
