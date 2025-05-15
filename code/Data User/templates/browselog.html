@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse LOG</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check logs!</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.username }}</td>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <br>
+    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a>
+</body>
+</html>
