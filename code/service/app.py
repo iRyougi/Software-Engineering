@@ -18,9 +18,6 @@ DB_CONFIG = {
 data_operation = Course_configuration(DB_CONFIG)
 gpa_data_operation = GPA_management(DB_CONFIG)
 
-def get_db_connection(self):
-    return mysql.connector.connect(**self.db_config)
-
 @app.route('/login', methods=['GET', 'POST'])#5.14新增登录界面Flask
 def login():
     if request.method == 'POST':

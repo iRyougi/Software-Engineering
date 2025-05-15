@@ -51,7 +51,7 @@ class Course_configuration:
             if old_id != new_id:
                 cursor.execute('SELECT id FROM courses WHERE id = %s', (new_id,))
                 if cursor.fetchone():
-                    raise ValueError(f"CourseID {new_id} is exist")
+                    raise ValueError(f"CourseID {new_id} already exist")
 
             cursor.execute(
                 'UPDATE courses SET id = %s, course_name = %s, description = %s WHERE id = %s',
@@ -63,7 +63,7 @@ class Course_configuration:
         except mysql.connector.IntegrityError as e:
             conn.rollback()
             if "Duplicate entry" in str(e):
-                raise ValueError(f"Course name '{new_name}' is exist")
+                raise ValueError(f"Course name '{new_name}' already exist")
             else:
                 raise e
         finally:
@@ -78,7 +78,7 @@ class Course_configuration:
             (course_id,)
         )
         if cursor.rowcount == 0:
-            raise ValueError("Course is not exist")
+            raise ValueError("Course does not exist")
         conn.commit()
         cursor.close()
         conn.close()

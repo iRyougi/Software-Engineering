@@ -38,22 +38,6 @@
     </div>
 
     <script>
-        function loadThesis() {
-            fetch('/api/thesis')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById('thesisTable');
-                    tbody.innerHTML = data.data.map(thesis => `
-                        <tr>
-                            <td>${thesis.title}</td>
-                            <td>${thesis.author}</td>
-                            <td>${new Date(thesis.upload_date).toLocaleDateString()}</td>
-                            <td><a href="/uploads/${thesis.file_path}" download>Download</a></td>
-                        </tr>
-                    `).join('');
-                });
-        }
-
         function uploadThesis() {
             const formData = new FormData(document.getElementById('uploadForm'));           
             fetch('/upload_thesis', {
