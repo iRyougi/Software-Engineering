@@ -1,0 +1,42 @@
+<!-- templates/downloadthesis.html -->
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>Welcome {{ username }} to download thesis!</h1>
+    <form method="POST">
+        <input type="text" name="keyword" placeholder="Enter thesis title" required>
+        <button type="submit">Search</button>
+    </form>
+    
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    
+    {% if thesis %}
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Author</th>
+            <th>Title</th>
+            <th>Download</th>
+        </tr>
+        {% for t in thesis %}
+        <tr>
+            <td>{{ t.id }}</td>
+            <td>{{ t.author }}</td>
+            <td>{{ t.title }}</td>
+            <td>
+                <a href="{{ url_for('download_thesis', title=t.id) }}" download>
+                    <button>Download PDF</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    
+    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Student Record</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check student records!</h1>
+    <h2>VIP operations:</h2>
+    <a href="{{ url_for('getstudentrecord', username=username) }}">Get student record</a><br>
+    <a href="{{ url_for('checkidentity', username=username) }}">Check identity</a><br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Student Record No.</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for studentrecord in studentrecords %}
+                <tr>
+                    <td>{{ studentrecord.id }}</td>
+                    <td>{{ studentrecord.name }}</td>
+                    <td>{{ studentrecord.gender }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <br>
+    <h2>Otherwise:</h2>
+    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+</body>
+</html>
