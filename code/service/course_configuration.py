@@ -69,6 +69,7 @@ class Course_configuration:
         finally:
             cursor.close()
             conn.close()
+    
     def delete_course(self, course_id): #delete course 
         conn = self._get_connection()
         cursor = conn.cursor()
