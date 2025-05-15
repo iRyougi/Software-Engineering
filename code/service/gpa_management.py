@@ -8,7 +8,7 @@ class GPA_management:
     def _get_connection(self):
         return mysql.connector.connect(**self.db_config)
     
-    def _create_table(self):
+    def _create_table(self):#初始化时如果没有gpa数据表会进行创建
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute('''
@@ -24,7 +24,7 @@ class GPA_management:
         cursor.close()
         conn.close()    
 
-    def add_gpa_record(self, student_id, name, grade, gpa):
+    def add_gpa_record(self, student_id, name, grade, gpa):#插入gpa信息并处理学号重复异常
         conn = self._get_connection()
         cursor = conn.cursor()
         try:
@@ -39,7 +39,7 @@ class GPA_management:
             cursor.close()
             conn.close()
 
-    def get_all_gpa(self):
+    def get_all_gpa(self):#查询并返回所有gpa记录至下方表单
         conn = self._get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('SELECT * FROM student_gpa')
@@ -48,7 +48,7 @@ class GPA_management:
         conn.close()
         return records
 
-    def delete_gpa_record(self, student_id):
+    def delete_gpa_record(self, student_id):#删除gpa记录
         conn = self._get_connection()
         cursor = conn.cursor()
         try:

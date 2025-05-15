@@ -18,8 +18,8 @@ DB_CONFIG = {
 data_operation = Course_configuration(DB_CONFIG)
 gpa_data_operation = GPA_management(DB_CONFIG)
 
-@app.route('/login', methods=['GET', 'POST'])#5.14新增登录界面Flask
-def login():
+@app.route('/login', methods=['GET', 'POST'])
+def login():#用数据库确定登录者是否为管理员
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -39,8 +39,8 @@ def login():
     return render_template('login.html')
 
 @app.route('/')
-def home():
-    return redirect(url_for('login'))#5.14 进行过修改 把flask变成渲染登录界面 
+def home():#重定向至主页
+    return redirect(url_for('login'))
 
 @app.route('/index')
 def index():
@@ -51,7 +51,7 @@ def course_page():
     return render_template('course.html')#5.13 新增渲染课程管理页面
 
 @app.route('/api/courses', methods=['GET'])
-def get_courses():
+def get_courses():#从数据库获取所有课程数据并返回JSON格式
     try:
         courses = data_operation.get_all_courses()
         return jsonify({'status': 'success', 'data': courses})
@@ -59,7 +59,7 @@ def get_courses():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/add_course', methods=['POST'])
-def add_course():
+def add_course():#接收填入数据，验证课程并添加新课程
     course_id = request.form.get('course_id')
     course_name = request.form.get('course_name')
     description = request.form.get('description')
@@ -73,7 +73,7 @@ def add_course():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/edit_course/<int:old_id>', methods=['PUT'])
-def edit_course(old_id):
+def edit_course(old_id):#更新课程数据时处理旧ID数据防止冲突
     new_id = request.form.get('new_id')
     new_name = request.form.get('new_name')
     new_description = request.form.get('new_description')
@@ -88,7 +88,7 @@ def edit_course(old_id):
 
     
 @app.route('/delete_course/<int:course_id>', methods=['DELETE'])
-def delete_course(course_id):
+def delete_course(course_id):#根据ID删除数据库中课程信息
     try:
         data_operation.delete_course(course_id)
         return jsonify({'status': 'success', 'message': 'Delete course successfully'})
@@ -101,7 +101,7 @@ def thesis_management():
 
 
 @app.route('/api/thesis', methods=['GET'])
-def get_papers():
+def get_papers():#从数据库获取所有论文数据并返回JSON格式
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor(dictionary=True)
@@ -115,7 +115,7 @@ def get_papers():
 
 
 @app.route('/upload_thesis', methods=['POST'])
-def upload_thesis():
+def upload_thesis():#处理论文上传与验证标题、作者等必填项
     try:
         title = request.form.get('title')
         author = request.form.get('author')
@@ -146,11 +146,11 @@ def upload_thesis():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/uploads/<filename>')
-def download_file(filename):
+def download_file(filename):#提供文件下载接口
     return send_from_directory('uploads', filename)
 
 @app.route('/delete_thesis/<int:thesis_id>', methods=['DELETE'])
-def delete_thesis(thesis_id):
+def delete_thesis(thesis_id):#删除论文记录与文件（文件本体依然留在uploads文件夹中）
     try:
         file_path = request.args.get('filePath')
 
@@ -176,7 +176,7 @@ def gpa_management():
     return render_template('gpa.html')
 
 @app.route('/api/gpa', methods=['GET'])
-def get_gpa_records():
+def get_gpa_records():#从数据库获取所有gpa记录并返回JSON格式
     try:
         records = gpa_data_operation.get_all_gpa()
         return jsonify({'status': 'success', 'data': records})
@@ -184,7 +184,7 @@ def get_gpa_records():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/add_gpa', methods=['POST'])
-def add_gpa():
+def add_gpa():#添加gpa
     try:
         student_id = request.form.get('student_id')
         name = request.form.get('name')
@@ -203,7 +203,7 @@ def add_gpa():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/delete_gpa/<string:student_id>', methods=['DELETE'])
-def delete_gpa(student_id):
+def delete_gpa(student_id):#删除gpa
     try:
         gpa_data_operation.delete_gpa_record(student_id)
         return jsonify({'status': 'success', 'message': 'GPA record deleted successfully'})

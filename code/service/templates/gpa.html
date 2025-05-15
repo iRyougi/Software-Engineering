@@ -2,19 +2,7 @@
 <html>
 <head>
     <title>GPA Management</title>
-    <style>
-        table { border-collapse: collapse; width: 80%; margin: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .form-container { margin: 20px; padding: 20px; border: 1px solid #ccc; width: 300px; }
-        input, select { 
-            width: 200px; 
-            padding: 5px; 
-            margin: 5px 0; 
-            display: block; 
-        }
-        button { margin: 5px; padding: 5px 10px; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gpa.css') }}">
 </head>
 <body>
     <div class="form-container">
@@ -48,6 +36,7 @@
     </table>
 
     <script>
+        //获取gpa数据并动态生成表格
         function loadGPA() {
             fetch('/api/gpa')
                 .then(response => response.json())
@@ -69,7 +58,8 @@
                     });
                 });
         }
-
+        
+        //验证必须填的字段如姓名、ID
         function validateAndAdd() {
             const studentId = document.getElementById('studentId').value;
             const name = document.getElementById('studentName').value;
@@ -85,7 +75,8 @@
                 addGPA(studentId, name, grade, gpa);
             }
         }
-
+        
+        //添加gpa记录
         function addGPA(studentId, name, grade, gpa) {
             const formData = new URLSearchParams();
             formData.append('student_id', studentId);
@@ -113,6 +104,7 @@
             });
         }
 
+        //删除gpa记录
         function deleteRecord(studentId) {
             if (confirm('Are you sure you want to delete this record?')) {
                 fetch(`/delete_gpa/${studentId}`, {

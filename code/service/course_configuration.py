@@ -8,7 +8,7 @@ class Course_configuration:
     def _get_connection(self):
         return mysql.connector.connect(**self.db_config)
 
-    def _create_table(self):
+    def _create_table(self):#初始化时如果课程数据不存在自动创建课程数据表
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute('''
@@ -22,7 +22,7 @@ class Course_configuration:
         cursor.close()
         conn.close()
 
-    def add_course(self, course_id, course_name, description):#add course
+    def add_course(self, course_id, course_name, description):#添加新课程并处理ID和课程名重复的情况
         conn = self._get_connection()
         cursor = conn.cursor()
         try:
@@ -44,7 +44,7 @@ class Course_configuration:
             cursor.close()
             conn.close()
 
-    def edit_course(self, old_id, new_id, new_name, new_description):#edit course
+    def edit_course(self, old_id, new_id, new_name, new_description):#编辑课程信息，处理编辑过程中ID修改和名称修改后和已有课程重复的情况
         conn = self._get_connection()
         cursor = conn.cursor()
         try:
@@ -70,7 +70,7 @@ class Course_configuration:
             cursor.close()
             conn.close()
     
-    def delete_course(self, course_id): #delete course 
+    def delete_course(self, course_id): #删除课程
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(
@@ -83,7 +83,7 @@ class Course_configuration:
         cursor.close()
         conn.close()
 
-    def get_all_courses(self):#check all the course from sql and give a list
+    def get_all_courses(self):#查询并返回所有课程数据以呈现在页面下方列表
         conn = self._get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('SELECT * FROM courses')
