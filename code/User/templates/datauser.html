@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Datauser</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to User Interface!</h1>
+    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+    <h2>User Options:</h2>
+    <a href="{{ url_for('browsepolicy', username = username) }}">browsepolicy</a><br>
+    <a href="{{ url_for('seekhelp', username = username) }}">Seek Help</a><br>
+</body>
+</html>

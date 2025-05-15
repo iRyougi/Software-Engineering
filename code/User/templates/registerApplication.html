@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>registerApplication</title>
+</head>
+<body>
+    <h1>Register Application for Organization</h1>
+    <form action="{{ url_for('registerApplication') }}" method="POST" enctype="multipart/form-data">
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" required><br><br>
+  
+      <label for="fullname">Full Name:</label>
+      <input type="text" name="fullname" id="fullname" required><br><br>
+  
+      <label for="shortname">Short Name:</label>
+      <input type="text" name="shortname" id="shortname" required><br><br>
+  
+      <label for="pdf_file">Upload PDF:</label>
+      <input type="file" name="pdf_file" id="pdf_file" accept=".pdf" required><br><br>
+
+      <label for="verification_code">Verification Code:</label>
+      <input type="text" name="verification_code" id="verification_code" required>
+      <button type="button" id="get_code_button" onclick="getVerificationCode()">Get Code</button><br><br>
+  
+      <button type="submit">Submit</button>
+    </form>
+    <br>
+    <a href="{{ url_for('home') }}">Back to main page</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <script>
+        function getVerificationCode() {
+            const email = document.getElementById('email').value;
+
+            if (!email) {
+                alert('Please enter your email to get the verification code.');
+                return;
+            }
+
+            fetch('{{ url_for("send_verification_code") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Verification code sent to your email.');
+                } else {
+                    alert('Failed to send verification code: ' + data.message);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

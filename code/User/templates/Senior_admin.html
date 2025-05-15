@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Senior E_admin</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to Senior E_admin User Interface!</h1>
+
+    <a href="{{ url_for('seniorapplicationreview', username = username) }}">Review Application</a><br>
+    
+    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+    
+</body>
+</html>

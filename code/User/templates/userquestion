@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Questions</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Questions</h1>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Question</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question.username }}</td>
+            <td>{{ question.question }}</td>
+            <td>{{ question.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

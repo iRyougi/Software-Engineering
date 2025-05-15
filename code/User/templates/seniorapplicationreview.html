@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Senior Application Review</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+        }
+
+        /* Main content area */
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        /* Left-side scrollable list */
+        .application-list {
+            width: 30%;
+            height: 100%;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .application-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .application-list li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .application-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Right-side details view */
+        .application-details {
+            flex-grow: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .application-details h2 {
+            margin-top: 0;
+        }
+
+        .pdf-preview {
+            border: 1px solid #ccc;
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #f8f8f8;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        let currentShortname = '';
+
+        // JavaScript to handle application selection
+        function showDetails(email, fullname, shortname, fileUrl) {
+            document.getElementById('details-email').innerText = email;
+            document.getElementById('details-fullname').innerText = fullname;
+            document.getElementById('details-shortname').innerText = shortname;
+            document.getElementById('pdf-preview').src = fileUrl; // Set the PDF preview URL
+            currentShortname = shortname; // Store the current shortname for actions
+        }
+
+        // Accept application
+        function acceptApplication() {
+            if (currentShortname) {
+                fetch(`/senioraccept_application/${currentShortname}`, {
+                    method: 'POST'
+                }).then(() => {
+                    location.reload(); // Reload the page after the action
+                });
+            }
+        }
+
+        // Reject application
+        function rejectApplication() {
+            if (currentShortname) {
+                fetch(`/reject_application/${currentShortname}`, {
+                    method: 'POST'
+                }).then(() => {
+                    location.reload(); // Reload the page after the action
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Main content area -->
+    <div class="main-content">
+        <!-- Left-side scrollable list -->
+        <div class="application-list">
+            <h3>Applications</h3>
+            <ul>
+                {% for application in applications %}
+                <li onclick="showDetails('{{ application.email }}', '{{ application.fullname }}', '{{ application.shortname }}', '{{ application.file_url }}')">
+                    {{ application.shortname }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right-side details view -->
+        <div class="application-details">
+            <h2>Application Details</h2>
+            <p><strong>Email:</strong> <span id="details-email">Select an application</span></p>
+            <p><strong>Full Name:</strong> <span id="details-fullname">N/A</span></p>
+            <p><strong>Short Name:</strong> <span id="details-shortname">N/A</span></p>
+            <embed id="pdf-preview" class="pdf-preview" src="" type="application/pdf" />
+
+            <!-- Action buttons -->
+            <div class="action-buttons" style="margin-top: 20px;">
+                <button id="accept-button" onclick="acceptApplication()">Accept</button>
+                <button id="reject-button" onclick="rejectApplication()">Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><a href="{{ url_for('Senior_admin', username=username) }}">Return to Senior E_admin User Page</a></p>
+    </footer>
+</body>
+</html>
