@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>Welcome {{ username }} to get student record!</h1>
+    <form method="POST">
+        <label for="student_id">Student ID:</label>
+        <input type="text" id="student_id" name="student_id" required>
+        <br>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if studentrecords %}
+        <h3>Result:</h3>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Date of Birth</th>
+                <th>Enrollment Year</th>
+                <th>Graduation Year</th>
+                <th>GPA</th>
+            </tr>
+            {% for record in studentrecords %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.name }}</td>
+                <td>{{ record.gender }}</td>
+                <td>{{ record.dateofbirth }}</td>
+                <td>{{ record.enrollmentyear }}</td>
+                <td>{{ record.graduationyear }}</td>
+                <td>{{ record.gpa }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        {% if request.method == 'POST' %}
+            <p>No matching records found.</p>
+        {% endif %}
+    {% endif %}
+    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+</body>
+</html>

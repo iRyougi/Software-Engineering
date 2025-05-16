@@ -5,7 +5,11 @@
 </head>
 <body>
     <h1>Welcome {{username}} to submit question!</h1>
+<<<<<<< HEAD
     <form method="POST" action = "{{ url_for('seekhelp', username = username) }}">
+=======
+    <form method="POST", action = "{{ url_for('seekhelp', username = username) }}">
+>>>>>>> origin/main
         Question: <textarea name="question" rows="5" cols="40" required></textarea><br><br>
         <button type="submit">Submit</button>
     </form>
