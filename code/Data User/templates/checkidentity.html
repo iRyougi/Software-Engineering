@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check students' identity authentication!</h1>
+    <form method="POST">
+        <div>
+            <label>ID:</label>
+            <input type="text" name="student_id" required>
+        </div>
+        <div>
+            <label>Name:</label>
+            <input type="text" name="name" required>
+        </div>
+        <div>
+            <label>Date of Birth (YYYY.MM.DD):</label>
+            <input type="text" name="dob" placeholder="e.g., 2000.01.01" required>
+        </div>
+        <button type="submit">Check</button>
+    </form>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    {% if result is not none %}
+        <h2>Result: {{ result }}</h2>
+    {% endif %}
+    
+    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+</body>
+</html>
