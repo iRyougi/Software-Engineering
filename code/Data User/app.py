@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-from flask import send_from_directory
->>>>>>> origin/main
-=======
-from flask import send_from_directory
->>>>>>> origin/main
 from flask import Flask, render_template, request, redirect, url_for
 from dataclass import DataUser, Pay
 import mysql.connector
@@ -74,87 +66,6 @@ def browsebankaccount(username):
     bankaccounts = data_operation.browseBankAccount(username)
     return render_template('browsebankaccount.html', bankaccounts = bankaccounts, username = username)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/main
-@app.route('/browsestudentrecord/<string:username>')
-def browsestudentrecord(username):
-    studentrecords = data_operation.browseStudentRecord(username)
-    return render_template('browsestudentrecord.html', studentrecords = studentrecords, username = username)
-
-@app.route('/browsethesis/<string:username>')
-def browsethesis(username):
-    thesis = data_operation.browseThesis(username)
-    return render_template('browsethesis.html', thesis = thesis, username = username)
-
-@app.route('/searchthesis/<string:username>', methods=['GET', 'POST'])
-def searchthesis(username):
-    if request.method == 'POST':
-        keyword = request.form['keyword']
-        thesis = data_operation.searchThesisByTitle(username, keyword)
-        return render_template('searchthesis.html', 
-                             username=username,
-                             thesis=thesis,
-                             message="No results found" if not thesis else None)
-    return render_template('searchthesis.html', username=username)
-
-@app.route('/downloadthesis/<string:username>', methods=['GET', 'POST'])
-def downloadthesis(username):
-    if request.method == 'POST':
-        keyword = request.form['keyword']
-        thesis = data_operation.searchThesisWithTitle(username, keyword)
-        return render_template('downloadthesis.html', 
-                             username=username,
-                             thesis=thesis,
-                             message="No results found" if not thesis else None)
-    return render_template('downloadthesis.html', username=username)
-
-@app.route('/download/<title>')
-def download_thesis(title):
-    return send_from_directory('static/thesis', f"{title}.pdf", as_attachment=True)
-
-@app.route('/getstudentrecord/<string:username>', methods=['GET', 'POST'])
-def getstudentrecord(username):
-    if request.method == 'POST':
-        student_id = request.form.get('student_id')
-        name = request.form.get('name')
-        try:
-            student_id = int(student_id)
-        except ValueError:
-            return render_template('getstudentrecord.html', 
-                                 username=username, 
-                                 error="ID must be a number")
-        studentrecords = data_operation.getStudentRecordByIdAndName(username, student_id, name)
-        return render_template('getstudentrecord.html', 
-                             username=username, 
-                             studentrecords=studentrecords)
-    return render_template('getstudentrecord.html', username=username)
-
-@app.route('/checkidentity/<string:username>', methods=['GET', 'POST'])
-def checkidentity(username):
-    result = None
-    if request.method == 'POST':
-        student_id = request.form.get('student_id')
-        name = request.form.get('name')
-        dob = request.form.get('dob')
-        try:
-            student_id = int(student_id)
-        except ValueError:
-            return render_template('checkidentity.html', 
-                                 username=username, 
-                                 error="ID must be a number")
-        exists = data_operation.checkIdentity(username, student_id, name, dob)
-        result = "Yes" if exists else "No"
-    return render_template('checkidentity.html', 
-                         username=username, 
-                         result=result)
-
-<<<<<<< HEAD
->>>>>>> origin/main
-=======
->>>>>>> origin/main
 @app.route('/seekhelp/<string:username>', methods=['GET', 'POST'])
 def seekhelp(username):
     if request.method == 'POST':
