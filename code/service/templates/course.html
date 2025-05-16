@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h3>Add New Course</h3>
+        <input type="number" id="courseId" placeholder="Course ID (e.g., 1001)" required>
+        <input type="text" id="courseName" placeholder="Course Name" required>
+        <textarea id="courseDesc" placeholder="Course Description"></textarea>
+        <button onclick="addCourse()">Add Course</button>
+    </div>
+
+    <h3>Course List</h3>
+    <table id="coursesTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Course Name</th>
+                <th>Description</th>
+                <th>Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        // 获取课程数据并动态生成表格
+        function loadCourses() {
+            fetch('/api/courses')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const tbody = document.querySelector('#coursesTable tbody');
+                        tbody.innerHTML = '';
+                        data.data.forEach(course => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${course.id}</td>
+                                    <td>${course.course_name}</td>
+                                    <td>${course.description || 'No description'}</td>
+                                    <td>
+                                        <button onclick="editCourse(${course.id}, '${course.course_name}', '${course.description}')">Edit</button>
+                                        <button onclick="deleteCourse(${course.id})">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                });
+        }
+
+        // 前端添加课程并提交到后端
+        function addCourse() {
+            const courseId = document.getElementById('courseId').value;
+            const courseName = document.getElementById('courseName').value;
+            const courseDesc = document.getElementById('courseDesc').value;
+            
+            if (!courseId || !courseName) {
+                alert("ID and Course Name cannot be empty!");
+                return;
+            }
+
+            fetch('/add_course', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `course_id=${encodeURIComponent(courseId)}&course_name=${encodeURIComponent(courseName)}&description=${encodeURIComponent(courseDesc)}`
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(result.message);
+                if (result.status === 'success') {
+                    document.getElementById('courseId').value = '';
+                    document.getElementById('courseName').value = '';
+                    document.getElementById('courseDesc').value = '';
+                    loadCourses();
+                }
+            });
+        }
+
+        // 删除课程
+        function deleteCourse(id) {
+            if (confirm('Are you sure you want to delete this course?')) {
+                fetch(`/delete_course/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(result => {
+                    alert(result.message);
+                    if (result.status === 'success') {
+                        loadCourses();
+                    }
+                });
+            }
+        }
+
+        // 编辑课程并提交更新
+        function editCourse(oldId, currentName, currentDesc) {
+            const newId = prompt('Enter new course ID:', oldId);
+            const newName = prompt('Enter new course name:', currentName);
+            const newDesc = prompt('Enter new course description:', currentDesc || '');
+            
+            if (newId && newName && (newId != oldId || newName !== currentName || newDesc !== currentDesc)) {
+                fetch(`/edit_course/${oldId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `new_id=${encodeURIComponent(newId)}&new_name=${encodeURIComponent(newName)}&new_description=${encodeURIComponent(newDesc)}`
+                })
+                .then(response => response.json())
+                .then(result => {
+                    alert(result.message);
+                    if (result.status === 'success') {
+                        loadCourses();
+                    }
+                });
+            }
+        }
+
+        window.onload = loadCourses;
+    </script>
+</body>
+</html>
