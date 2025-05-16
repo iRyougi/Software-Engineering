@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage E-DBA Members</title>
+</head>
+<body>
+    <h1>Manage E-DBA Members</h1>
+    <p>
+        <a href="{{ url_for('O_convener', username=username) }}">Back to Dashboard</a> | 
+        <a href="{{ url_for('add_member_page', username=username) }}">Add Member</a> | 
+        <a href="{{ url_for('upload_members_page', username=username) }}">Upload Members via Excel</a>
+    </p>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Access Right</th>
+            <th>Thesis Quota</th>
+            <th>Actions</th>
+        </tr>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.id }}</td>
+            <td>{{ member.name }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.access_right }}</td>
+            <td>{{ member.thesis_quota }}</td>
+            <td>
+                <a href="{{ url_for('edit_member', member_id=member.id, username=username) }}">Edit</a>
+                <form action="{{ url_for('delete_member', member_id=member.id, username=username) }}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

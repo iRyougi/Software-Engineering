@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2025-05-16 01:30:24
+-- 生成日期： 2025-05-16 19:36:07
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -46,7 +46,61 @@ INSERT INTO `activity_logs` (`id`, `username`, `organization`, `activity`, `time
 (4, 's230026238@mail.uic.edu.cn', 'Unknown', 'Login', '2025-05-15 19:44:24'),
 (5, 'Sam', 'Unknown', 'Login', '2025-05-15 19:44:28'),
 (6, 's230026238@mail.uic.edu.cn', 'United International College', 'Login', '2025-05-15 20:26:47'),
-(7, 'Sam', 'Unknown', 'Login', '2025-05-15 20:26:53');
+(7, 'Sam', 'Unknown', 'Login', '2025-05-15 20:26:53'),
+(8, 'Sven', 'Unknown', 'Login', '2025-05-16 15:13:56'),
+(9, 'Sam', 'Unknown', 'Login', '2025-05-16 15:14:01'),
+(10, 'Simon', 'Unknown', 'Login', '2025-05-16 15:14:10'),
+(11, 'Simon', 'Unknown', 'Login', '2025-05-16 15:19:57'),
+(12, 'Simon', 'Unknown', 'Login', '2025-05-16 15:23:18'),
+(13, 'Simon', 'Unknown', 'Login', '2025-05-16 15:27:38'),
+(14, 's230026238@mail.uic.edu.cn', 'United International College', 'Login', '2025-05-16 15:42:56'),
+(15, 'Sabien', 'Unknown', 'Login', '2025-05-16 17:25:07');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `e_dba_members`
+--
+
+CREATE TABLE `e_dba_members` (
+  `id` int(11) NOT NULL,
+  `organization` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `access_right` int(11) NOT NULL,
+  `thesis_quota` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 转存表中的数据 `e_dba_members`
+--
+
+INSERT INTO `e_dba_members` (`id`, `organization`, `name`, `email`, `access_right`, `thesis_quota`) VALUES
+(1, 'United International College', 'Justin', '*@mail.uic.edu.cn', 1, 100);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `o_convener_banking`
+--
+
+CREATE TABLE `o_convener_banking` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `account_number` varchar(255) NOT NULL,
+  `account_name` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 转存表中的数据 `o_convener_banking`
+--
+
+INSERT INTO `o_convener_banking` (`id`, `username`, `bank_name`, `account_number`, `account_name`, `password`, `created_at`, `updated_at`) VALUES
+(1, 's230026238@mail.uic.edu.cn', 'A', '111', 'B', '123', '2025-05-16 15:57:06', '2025-05-16 15:57:06');
 
 -- --------------------------------------------------------
 
@@ -116,7 +170,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `email`, `usertype`, `level`) 
 (2, 'Sven', '123', 'Sven@uic.edu.cn', 'Senior_admin', 3),
 (3, 'Sam', '123', 'Sam@uic.edu.cn', 'E_admin', 3),
 (4, 'Simon', '123', 'Simon@uic.edu.cn', 'O_convener', 3),
-(7, 's230026238@mail.uic.edu.cn', '1672', 's230026238@mail.uic.edu.cn', 'O_convener', 3);
+(7, 's230026238@mail.uic.edu.cn', '1672', 's230026238@mail.uic.edu.cn', 'O_convener', 3),
+(8, 'Sabien', '123', 'Sabien@mail.uic.edu.cn', 'Data_consumer', 3);
 
 -- --------------------------------------------------------
 
@@ -143,6 +198,30 @@ INSERT INTO `userquestion` (`question_id`, `title`, `description`, `email`, `use
 (1, 'TEST', 'testing', '123@456', 'E_admin', '2025-05-15 17:18:24', NULL, NULL),
 (2, 'TEST2', 'TESTING', '123@456', 'Senior_admin', '2025-05-15 17:22:58', '2025-05-15 19:08:48', '12345');
 
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `workspaces`
+--
+
+CREATE TABLE `workspaces` (
+  `id` int(11) NOT NULL,
+  `organization` varchar(255) NOT NULL,
+  `course_sharing` tinyint(1) DEFAULT 0,
+  `id_authentication` tinyint(1) DEFAULT 0,
+  `id_price` decimal(10,2) DEFAULT 0.00,
+  `thesis_sharing` tinyint(1) DEFAULT 0,
+  `thesis_price` decimal(10,2) DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 转存表中的数据 `workspaces`
+--
+
+INSERT INTO `workspaces` (`id`, `organization`, `course_sharing`, `id_authentication`, `id_price`, `thesis_sharing`, `thesis_price`) VALUES
+(1, 'United International College', 1, 1, 0.00, 1, 0.00),
+(2, 'BNBU', 1, 1, 1.00, 1, 1.00);
+
 --
 -- 转储表的索引
 --
@@ -152,6 +231,19 @@ INSERT INTO `userquestion` (`question_id`, `title`, `description`, `email`, `use
 --
 ALTER TABLE `activity_logs`
   ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `e_dba_members`
+--
+ALTER TABLE `e_dba_members`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `o_convener_banking`
+--
+ALTER TABLE `o_convener_banking`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_username` (`username`);
 
 --
 -- 表的索引 `policies`
@@ -178,6 +270,12 @@ ALTER TABLE `userquestion`
   ADD PRIMARY KEY (`question_id`);
 
 --
+-- 表的索引 `workspaces`
+--
+ALTER TABLE `workspaces`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 在导出的表使用AUTO_INCREMENT
 --
 
@@ -185,7 +283,19 @@ ALTER TABLE `userquestion`
 -- 使用表AUTO_INCREMENT `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- 使用表AUTO_INCREMENT `e_dba_members`
+--
+ALTER TABLE `e_dba_members`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- 使用表AUTO_INCREMENT `o_convener_banking`
+--
+ALTER TABLE `o_convener_banking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用表AUTO_INCREMENT `policies`
@@ -203,13 +313,19 @@ ALTER TABLE `registerapplication`
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用表AUTO_INCREMENT `userquestion`
 --
 ALTER TABLE `userquestion`
   MODIFY `question_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- 使用表AUTO_INCREMENT `workspaces`
+--
+ALTER TABLE `workspaces`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banking Information</title>
+</head>
+<body>
+    <h1>Banking Information for {{ username }}</h1>
+    
+        <h2>Your Current Banking Info</h2>
+        <form method="post">
+            <label>Bank Name:</label>
+            <input type="text" name="bank_name" value="{{ bank_info.bank_name }}" readonly><br>
+            <label>Account Number:</label>
+            <input type="text" name="account_number" value="{{ bank_info.account_number }}" readonly><br>
+            <label>Account Name:</label>
+            <input type="text" name="account_name" value="{{ bank_info.account_name }}" readonly><br>
+
+        </form>
+
+        <h2>Add/Edit Banking Information</h2>
+        <form method="post">
+            <label>Bank Name:</label>
+            <input type="text" name="bank_name" required><br>
+            <label>Account Number:</label>
+            <input type="text" name="account_number" required><br>
+            <label>Account Name:</label>
+            <input type="text" name="account_name" required><br>
+            <label>Password:</label>
+            <input type="password" name="password" required><br>
+            <button type="submit">Submit</button>
+        </form>
+
+    <p><a href="{{ url_for('O_convener', username=username) }}">Back to Dashboard</a></p>
+</body>
+</html>

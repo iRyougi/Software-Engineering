@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit E-DBA Member</title>
+</head>
+<body>
+    <h1>Edit Member</h1>
+    <form method="post">
+        <label>Name:</label>
+        <input type="text" name="name"><br>
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Access Right:</label>
+        <input type="number" name="access_right" required><br>
+        <label>Thesis Quota:</label>
+        <input type="text" name="thesis_quota" required><br>
+        <button type="submit">Edit Member</button>
+    </form>
+    <p><a href="{{ url_for('manage_members', username=username) }}">Back to Members</a></p>
+</body>
+</html>

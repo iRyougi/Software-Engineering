@@ -5,6 +5,7 @@ from PyPDF2 import PdfReader
 from io import BytesIO
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+import pandas as pd  # Importing pandas for Excel file handling
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -296,6 +297,8 @@ def index():
                 return render_template('Senior_admin.html', username=username)
             elif user['usertype'] == 'E_admin':
                 return render_template('E_admin.html', username=username)
+            elif user['usertype'] == 'Data_consumer':
+                return render_template('data_consumer.html', username=username)
         else:
             return render_template('failure.html')
     return render_template('index.html')
@@ -515,6 +518,373 @@ def preview_policy(policy_id, username):
     else:
         flash("PDF file not found.", "error")
         return redirect(url_for('manage_policy', username=username))
+    
+#O_convener page
+@app.route('/O_convener/<string:username>')
+def O_convener(username):
+    # Get organization full name for this convener
+    connection_org = get_db_connection()
+    cursor_org = connection_org.cursor(dictionary=True)
+    query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+    cursor_org.execute(query_org, (username,))
+    result_org = cursor_org.fetchone()
+    cursor_org.close()
+    connection_org.close()
+    if result_org and result_org['fullname']:
+        organization = result_org['fullname']
+    else:
+        organization = "Unknown"
+
+    return render_template('O_convener.html', username = username, organization=organization)
+
+@app.route('/upload_members_page/<string:username>')
+def upload_members_page(username):
+    # Render the upload page
+    return render_template('upload_members.html', username=username)
+
+# Route to show all members for the convener
+@app.route('/manage_members/<string:username>')
+def manage_members(username):
+    connection_org = get_db_connection()
+    cursor_org = connection_org.cursor(dictionary=True)
+    query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+    cursor_org.execute(query_org, (username,))
+    result_org = cursor_org.fetchone()
+    cursor_org.close()
+    connection_org.close()
+    if result_org and result_org['fullname']:
+        organization = result_org['fullname']
+    else:
+        organization = "Unknown"
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM e_dba_members WHERE organization=%s"
+    cursor.execute(query, (organization,))
+    members = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('manage_members.html', members=members, username=username)
+
+@app.route('/add_member_page/<string:username>')
+def add_member_page(username):
+    # Render the add_members page
+    return render_template('add_member.html', username=username)
+
+@app.route('/edit_member_page/<string:username>')
+def edit_member_page(username):
+    # Render the add_members page
+    return render_template('edit_member.html', username=username)
+
+# Route for uploading the Excel file containing the member list
+@app.route('/upload_members/<string:username>', methods=['GET', 'POST'])
+def upload_members(username):
+    if request.method == 'POST':
+        if 'excel_file' not in request.files:
+            flash('No file part', 'error')
+            return redirect(url_for('upload_members', username=username))
+        file = request.files['excel_file']
+        if file.filename == '':
+            flash('No selected file', 'error')
+            return redirect(url_for('upload_members', username=username))
+        if file and file.filename.endswith(('.xls', '.xlsx')):
+            try:
+                # Retrieve the o-convener's organization full name from registerapplication table
+                connection_org = get_db_connection()
+                cursor_org = connection_org.cursor(dictionary=True)
+                query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+                cursor_org.execute(query_org, (username,))
+                result_org = cursor_org.fetchone()
+                cursor_org.close()
+                connection_org.close()
+                if result_org and result_org['fullname']:
+                    organization = result_org['fullname']
+                else:
+                    organization = "Unknown"
+
+                # Read the excel file using pandas
+                df = pd.read_excel(file)
+                # Process each row
+                connection = get_db_connection()
+                cursor = connection.cursor()
+                for index, row in df.iterrows():
+                    name = row.get('name')
+                    email = row.get('email')
+                    access_right = row.get('access right')
+                    quota = row.get('Quota for thesis download')
+                    
+                    # If name is missing, treat it as NULL
+                    if pd.isna(name):
+                        name = None
+                        
+                    # Insert (or update) record using the organization full name
+                    query = """
+                        INSERT INTO e_dba_members (organization, name, email, access_right, thesis_quota)
+                        VALUES (%s, %s, %s, %s, %s)
+                        ON DUPLICATE KEY UPDATE name=VALUES(name), access_right=VALUES(access_right), thesis_quota=VALUES(thesis_quota)
+                    """
+                    cursor.execute(query, (organization, name, email, access_right, quota))
+                connection.commit()
+                cursor.close()
+                connection.close()
+                flash('Member list uploaded successfully!', 'success')
+            except Exception as e:
+                flash('Error processing file: ' + str(e), 'error')
+        else:
+            flash('Please upload a valid Excel file.', 'error')
+        return redirect(url_for('O_convener', username=username))
+    return render_template('upload_members.html', username=username)
+
+# Route to add an individual member
+@app.route('/add_member/<string:username>', methods=['GET', 'POST'])
+def add_member(username):
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        access_right = request.form.get('access_right')
+        quota = request.form.get('thesis_quota')
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            connection_org = get_db_connection()
+            cursor_org = connection_org.cursor(dictionary=True)
+            query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+            cursor_org.execute(query_org, (username,))
+            result_org = cursor_org.fetchone()
+            cursor_org.close()
+            connection_org.close()
+            if result_org and result_org['fullname']:
+                organization = result_org['fullname']
+            else:
+                organization = "Unknown"
+
+            query = "INSERT INTO e_dba_members (organization, name, email, access_right, thesis_quota) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (organization, name, email, access_right, quota))
+            connection.commit()
+            flash('Member added successfully.', 'success')
+        except Exception as e:
+            connection.rollback()
+            flash('Error adding member: ' + str(e), 'error')
+        finally:
+            cursor.close()
+            connection.close()
+        return redirect(url_for('manage_members', username=username))
+    return render_template('add_member.html', username=username)
+
+# Route to edit an individual member
+@app.route('/edit_member/<int:member_id>/<string:username>', methods=['GET', 'POST'])
+def edit_member(member_id, username):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    connection_org = get_db_connection()
+    cursor_org = connection_org.cursor(dictionary=True)
+    query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+    cursor_org.execute(query_org, (username,))
+    result_org = cursor_org.fetchone()
+    cursor_org.close()
+    connection_org.close()
+    if result_org and result_org['fullname']:
+        organization = result_org['fullname']
+    else:
+        organization = "Unknown"
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        access_right = request.form.get('access_right')
+        quota = request.form.get('thesis_quota')
+        try:
+            query = "UPDATE e_dba_members SET name=%s, email=%s, access_right=%s, thesis_quota=%s WHERE id=%s"
+            cursor.execute(query, (name, email, access_right, quota, member_id))
+            connection.commit()
+            flash('Member updated successfully.', 'success')
+        except Exception as e:
+            connection.rollback()
+            flash('Error updating member: ' + str(e), 'error')
+        finally:
+            cursor.close()
+            connection.close()
+        return redirect(url_for('manage_members', username=username))
+    else:
+        query = "SELECT * FROM e_dba_members WHERE id=%s"
+        cursor.execute(query, (member_id,))
+        member = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        if member:
+            return render_template('edit_member.html', member=member, username=username)
+        else:
+            flash('Member not found.', 'error')
+            return redirect(url_for('manage_members', username=username))
+
+# Route to delete an individual member
+@app.route('/delete_member/<int:member_id>/<string:username>', methods=['POST'])
+def delete_member(member_id, username):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    try:
+        query = "DELETE FROM e_dba_members WHERE id=%s"
+        cursor.execute(query, (member_id,))
+        connection.commit()
+        flash('Member deleted successfully.', 'success')
+    except Exception as e:
+        connection.rollback()
+        flash('Error deleting member: ' + str(e), 'error')
+    finally:
+        cursor.close()
+        connection.close()
+    return redirect(url_for('manage_members', username=username))
+
+@app.route('/banking_info/<string:username>', methods=['GET', 'POST'])
+def banking_info(username):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM o_convener_banking WHERE username = %s"
+    cursor.execute(query, (username,))
+    bank_info = cursor.fetchone()
+
+    if request.method == 'POST':
+        bank_name = request.form.get('bank_name')
+        account_number = request.form.get('account_number')
+        account_name = request.form.get('account_name')
+        password = request.form.get('password')
+        
+        if bank_info:
+            update_query = """
+                UPDATE o_convener_banking 
+                SET bank_name=%s, account_number=%s, account_name=%s, password=%s 
+                WHERE username=%s
+            """
+            cursor.execute(update_query, (bank_name, account_number, account_name, password, username))
+            flash('Banking info updated successfully!', 'success')
+        else:
+            insert_query = """
+                INSERT INTO o_convener_banking (username, bank_name, account_number, account_name, password)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            cursor.execute(insert_query, (username, bank_name, account_number, account_name, password))
+            flash('Banking info added successfully!', 'success')
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return redirect(url_for('O_convener', username=username))
+    else:
+        cursor.close()
+        connection.close()
+        return render_template('banking_info.html', username=username, bank_info=bank_info)
+
+@app.route('/o_convener_logs/<string:username>', methods=['GET'])
+def o_convener_logs(username):
+    # Get organization full name for this convener
+    connection_org = get_db_connection()
+    cursor_org = connection_org.cursor(dictionary=True)
+    query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
+    cursor_org.execute(query_org, (username,))
+    result_org = cursor_org.fetchone()
+    cursor_org.close()
+    connection_org.close()
+    if result_org and result_org['fullname']:
+        organization = result_org['fullname']
+    else:
+        organization = "Unknown"
+
+    # Build query for logs
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM activity_logs WHERE organization = %s"
+    filters = [organization]
+
+    # Optional filters
+    if request.args.get('activity'):
+        query += " AND activity LIKE %s"
+        filters.append('%' + request.args.get('activity') + '%')
+    if request.args.get('username_filter'):
+        query += " AND username = %s"
+        filters.append(request.args.get('username_filter'))
+    if request.args.get('date'):
+        query += " AND DATE(timestamp) = %s"
+        filters.append(request.args.get('date'))
+
+    query += " ORDER BY timestamp DESC"
+    cursor.execute(query, tuple(filters))
+    logs = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('o_convener_logs.html', logs=logs, username=username)
+
+
+@app.route('/manage_workspace/<string:username>', methods=['GET', 'POST'])
+def manage_workspace(username):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT fullname FROM registerapplication WHERE email=%s ORDER BY id DESC LIMIT 1", (username,))
+    org_row = cursor.fetchone()
+    organization = org_row['fullname'] if org_row and org_row['fullname'] else "Unknown"
+    cursor.execute("SELECT * FROM workspaces WHERE organization=%s", (organization,))
+    workspace = cursor.fetchone()
+    if request.method == 'POST':
+        course_sharing = bool(request.form.get('course_sharing'))
+        id_authentication = bool(request.form.get('id_authentication'))
+        id_price = request.form.get('id_price') or 0
+        thesis_sharing = bool(request.form.get('thesis_sharing'))
+        thesis_price = request.form.get('thesis_price') or 0
+        if workspace:
+            query = """UPDATE workspaces SET course_sharing=%s, id_authentication=%s, id_price=%s,
+                       thesis_sharing=%s, thesis_price=%s WHERE organization=%s"""
+            cursor.execute(query, (course_sharing, id_authentication, id_price, thesis_sharing, thesis_price, organization))
+        else:
+            query = """INSERT INTO workspaces (organization, course_sharing, id_authentication, id_price, thesis_sharing, thesis_price)
+                       VALUES (%s, %s, %s, %s, %s, %s)"""
+            cursor.execute(query, (organization, course_sharing, id_authentication, id_price, thesis_sharing, thesis_price))
+        connection.commit()
+        cursor.execute("SELECT * FROM workspaces WHERE organization=%s", (organization,))
+        workspace = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return render_template('manage_workspace.html', workspace=workspace, organization=organization, username=username)
+
+@app.route('/data_consumer/<string:username>', methods=['GET'])
+def data_consumer(username):
+    # Show search page, optionally with results
+    org_query = request.args.get('org_query')
+    workspaces = []
+    if org_query:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM workspaces WHERE organization LIKE %s", ('%' + org_query + '%',))
+        workspaces = cursor.fetchall()
+        cursor.close()
+        connection.close()
+    return render_template('data_consumer.html', username=username, workspaces=workspaces)
+
+@app.route('/search_workspace/<string:username>', methods=['GET'])
+def search_workspace(username):
+    org_query = request.args.get('org_query')
+    workspaces = []
+    if org_query:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM workspaces WHERE organization LIKE %s", ('%' + org_query + '%',))
+        workspaces = cursor.fetchall()
+        cursor.close()
+        connection.close()
+    return render_template('data_consumer.html', username=username, workspaces=workspaces)
+
+@app.route('/workspace/<string:username>/<string:organization>')
+def workspace(username, organization):
+    # Get user level
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT level FROM user WHERE username=%s", (username,))
+    user = cursor.fetchone()
+    user_level = int(user['level']) if user and user['level'] else 1
+    cursor.execute("SELECT * FROM workspaces WHERE organization=%s", (organization,))
+    workspace = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    if not workspace:
+        flash('Workspace not found.', 'error')
+        return redirect(url_for('data_consumer', username=username))
+    return render_template('workspace.html', username=username, organization=organization, workspace=workspace, user_level=user_level)
 
 if __name__ == '__main__':
     app.run(debug=True)

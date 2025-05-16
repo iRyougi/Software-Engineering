@@ -5,7 +5,17 @@
 </head>
 <body>
     <h1>Welcome {{ username }} to O_convener User Interface!</h1>
+
+    <a href="{{ url_for('upload_members_page', username=username) }}">Upload Members via Excel</a><br>
+
+    <a href="{{ url_for('manage_members', username=username) }}">Manage Users</a><br>
+
+    <a href="{{ url_for('banking_info', username=username) }}">Manage Banking Info</a><br>
+
+    <a href="{{ url_for('o_convener_logs', username=username) }}">View Organization Activity Logs</a><br>
+
+    <a href="{{ url_for('manage_workspace', username=username) }}">Manage organization workspace</a><br>
+
     <p><a href="{{ url_for('index') }}">Sign out</a></p>
-    
 </body>
 </html>
