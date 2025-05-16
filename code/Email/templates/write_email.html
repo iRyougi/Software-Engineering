@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Write Email</title>
+    <style>
+        form { width: 60%; margin: 20px auto; }
+        input, textarea { width: 100%; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Write Email</h1>
+    <form action="/send_email" method="post">
+        <input type="email" name="recipient" placeholder="Recipient" required><br>
+        <input type="text" name="subject" placeholder="Subject" required><br>
+        <textarea name="body" rows="10" placeholder="Body" required></textarea><br>
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>

@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+from flask import send_from_directory
+>>>>>>> origin/main
 =======
 from flask import send_from_directory
 >>>>>>> origin/main
@@ -71,7 +75,10 @@ def browsebankaccount(username):
     return render_template('browsebankaccount.html', bankaccounts = bankaccounts, username = username)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/main
 @app.route('/browsestudentrecord/<string:username>')
 def browsestudentrecord(username):
     studentrecords = data_operation.browseStudentRecord(username)
@@ -144,6 +151,9 @@ def checkidentity(username):
                          username=username, 
                          result=result)
 
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 >>>>>>> origin/main
 @app.route('/seekhelp/<string:username>', methods=['GET', 'POST'])
 def seekhelp(username):

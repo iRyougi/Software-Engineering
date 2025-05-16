@@ -43,7 +43,10 @@ class DataUser():
     return bankaccounts
   
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/main
   def browseStudentRecord(self, username):
     connection = self.get_db_connection()
     cursor = connection.cursor(dictionary=True)  # Use dictionary for easier data handling
@@ -124,6 +127,9 @@ class DataUser():
     connection.close()
     return results
 
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 >>>>>>> origin/main
   def seekHelp(self, username, question):
     connection = self.get_db_connection()
@@ -139,6 +145,10 @@ class DataUser():
     connection.close()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  
+>>>>>>> origin/main
 =======
   
 >>>>>>> origin/main

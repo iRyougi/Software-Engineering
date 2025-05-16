@@ -121,7 +121,10 @@ CREATE TABLE `userquestion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/main
 -- --------------------------------------------------------
 
 --
@@ -167,6 +170,9 @@ INSERT INTO `studentrecord` (`id`, `name`, `gender`, `dateofbirth`, `enrollmenty
 (1, 'Jack', 'male', '2000.01.01', '2018', '2022', '3.5'),
 (2, 'Marry', 'female', '2001.01.01', '2019', '2023', '3.3'),
 (3, 'Tom', 'male', '2000.03.01', '2018', '2022', '3.2');
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 >>>>>>> origin/main
 --
 -- Indexes for dumped tables
@@ -205,7 +211,10 @@ ALTER TABLE `userquestion`
 
 --
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/main
 -- Indexes for table `user`
 --
 ALTER TABLE `studentrecord`
@@ -219,6 +228,9 @@ ALTER TABLE `thesis`
 
 
 --
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 >>>>>>> origin/main
 -- AUTO_INCREMENT for dumped tables
 --
@@ -253,9 +265,12 @@ ALTER TABLE `user`
 ALTER TABLE `userquestion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 <<<<<<< HEAD
+<<<<<<< HEAD
 COMMIT;
 
 =======
+=======
+>>>>>>> origin/main
 
 --
 -- AUTO_INCREMENT for table `thesis`
@@ -271,6 +286,9 @@ ALTER TABLE `studentrecord`
 COMMIT;
 
 
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 >>>>>>> origin/main
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
