@@ -71,13 +71,13 @@ class DataUser(User):
     pass
 
 class Pay():
-    def __init__(self, paymentNo, datatime, amount, receiver, sender, patmentMethod, paymentStatus):
+    def __init__(self, paymentNo, datetime, amount, receiver, sender, paymentMethod, paymentStatus):
         self.paymentNo = paymentNo
-        self.datatime = datatime
+        self.datetime = datetime
         self.amount = amount
         self.receiver =receiver
         self.sender = sender
-        self.patmentMethod = patmentMethod
+        self.paymentMethod = paymentMethod
         self.paymentStatus = paymentStatus
     def verifyPayment(self):
         pass
