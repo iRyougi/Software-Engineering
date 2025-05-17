@@ -6,13 +6,13 @@ import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
-service_bp = Blueprint('service_b', __name__, template_folder='templates') 
+service_bp = Blueprint('service_bp', __name__, template_folder='templates') 
 
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': '',
-    'database': 'testdb'
+    'database': 'debugdatabase'
 }
 
 data_operation = Course_configuration(DB_CONFIG)
@@ -32,7 +32,7 @@ def login():#用数据库确定登录者是否为管理员
         conn.close()
         
         if user:
-            return redirect(url_for('index'))
+            return redirect(url_for('user_bp.index'))
         else:
             return render_template('login.html', error="Invalid credentials")
     
@@ -40,7 +40,7 @@ def login():#用数据库确定登录者是否为管理员
 
 @service_bp.route('/')
 def home():#重定向至主页
-    return redirect(url_for('login'))
+    return redirect(url_for('service_bp.login'))
 
 @service_bp.route('/index')
 def index():

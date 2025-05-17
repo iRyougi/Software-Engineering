@@ -37,11 +37,16 @@ app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(datauser_bp, url_prefix='/datauser')
 
 # ==== Service模块，路由加前缀 /service ====
-app.register_blueprint(service_bp, url_prefix='/service')
+app.register_blueprint(service_bp, url_prefix='/')
 
 # ========== Email模块路由，全部加 /email 前缀 ==========
-app.register_blueprint(email_bp, url_prefix='/email')
+app.register_blueprint(email_bp, url_prefix='/email')\
+
+
+#Debug
+print(app.url_map) #打印出所有注册的 endpoint
 
 # ========== 启动 ==========
 if __name__ == '__main__':
     app.run(debug=True)
+    print(app.url_map)

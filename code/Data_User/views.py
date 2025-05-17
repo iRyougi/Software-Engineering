@@ -10,7 +10,7 @@ DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': '',  
-    'database': 'testdb'
+    'database': 'debugdatabase'
 }
 
 data_operation = DataUser(DB_CONFIG)

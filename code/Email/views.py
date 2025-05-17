@@ -9,7 +9,7 @@ DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': '',
-    'database': 'email'
+    'database': 'debugdatabase'
 }
 
 def get_db_connection():

@@ -15,7 +15,7 @@ DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': '',  
-    'database': 'testdb'
+    'database': 'debugdatabase'
 }
 
 data_operation = DataUser(DB_CONFIG)
@@ -168,7 +168,7 @@ def applicationreview(username):
     for application in applications:
         if application['file']:
             # Create a unique route for each file preview
-            application['file_url'] = url_for('preview_pdf', shortname=application['shortname'])
+            application['file_url'] = url_for('user_bp.preview_pdf', shortname=application['shortname'])
 
     return render_template('applicationreview.html', applications=applications, username=username)
 
@@ -299,7 +299,7 @@ def index():
 def logout(username):
     # Here, add additional logout functionality as needed.
     log_activity(username, "Logout")
-    return redirect(url_for('index'))
+    return redirect(url_for('user_bp.index'))
 
 @user_bp.route('/logs/<string:username>', methods=['GET'])
 def view_logs(username):
@@ -875,5 +875,5 @@ def workspace(username, organization):
     connection.close()
     if not workspace:
         flash('Workspace not found.', 'error')
-        return redirect(url_for('data_consumer', username=username))
+        return redirect(url_for('user_bp.data_consumer', username=username))
     return render_template('workspace.html', username=username, organization=organization, workspace=workspace, user_level=user_level)

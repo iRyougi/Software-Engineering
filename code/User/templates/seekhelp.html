@@ -5,11 +5,11 @@
 </head>
 <body>
     <h1>Welcome {{username}} to submit question!</h1>
-    <form method="POST", action = "{{ url_for('seekhelp', username = username) }}">
+    <form method="POST", action = "{{ url_for('user_bp.seekhelp', username = username) }}">
         Question: <textarea name="question" rows="5" cols="40" required></textarea><br><br>
         <button type="submit">Submit</button>
     </form>
     <br>
-    <a href="{{ url_for('datauser', username=username) }}">Back to Home</a>
+    <a href="{{ url_for('user_bp.datauser', username=username) }}">Back to Home</a>
 </body>
 </html>
