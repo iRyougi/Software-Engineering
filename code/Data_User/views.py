@@ -1,10 +1,9 @@
-from flask import send_from_directory
+from flask import send_from_directory, Blueprint
 from flask import Flask, render_template, request, redirect, url_for
-from dataclass import DataUser, Pay
+from Data_User.dataclass_datauser import DataUser, Pay
 import mysql.connector
 
-# Initialize Flask app
-app = Flask(__name__)
+datauser_bp = Blueprint('datauser_bp',  __name__, template_folder='templates') 
 
 # MySQL configuration
 DB_CONFIG = {
@@ -22,7 +21,7 @@ def get_db_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
 # Route to display the main page
-@app.route('/', methods=['GET', 'POST'])
+@datauser_bp.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         username = request.form['username']
@@ -48,36 +47,36 @@ def index():
             return render_template('loginfailure.html')
     return render_template('index.html')
 
-@app.route('/datauser/<string:username>')
+@datauser_bp.route('/datauser/<string:username>')
 def datauser(username):
     return render_template('datauser.html', username = username)
 
-@app.route('/browsepolicy/<string:username>')
+@datauser_bp.route('/browsepolicy/<string:username>')
 def browsepolicy(username):
     policies = data_operation.browsePolicy(username)
     return render_template('browsepolicy.html', policies=policies, username = username)
 
-@app.route('/browselog/<string:username>')
+@datauser_bp.route('/browselog/<string:username>')
 def browselog(username):
     logs = data_operation.browseLog(username)
     return render_template('browselog.html', logs = logs, username = username)
 
-@app.route('/browsebankaccount/<string:username>')
+@datauser_bp.route('/browsebankaccount/<string:username>')
 def browsebankaccount(username):
     bankaccounts = data_operation.browseBankAccount(username)
     return render_template('browsebankaccount.html', bankaccounts = bankaccounts, username = username)
 
-@app.route('/browsestudentrecord/<string:username>')
+@datauser_bp.route('/browsestudentrecord/<string:username>')
 def browsestudentrecord(username):
     studentrecords = data_operation.browseStudentRecord(username)
     return render_template('browsestudentrecord.html', studentrecords = studentrecords, username = username)
 
-@app.route('/browsethesis/<string:username>')
+@datauser_bp.route('/browsethesis/<string:username>')
 def browsethesis(username):
     thesis = data_operation.browseThesis(username)
     return render_template('browsethesis.html', thesis = thesis, username = username)
 
-@app.route('/searchthesis/<string:username>', methods=['GET', 'POST'])
+@datauser_bp.route('/searchthesis/<string:username>', methods=['GET', 'POST'])
 def searchthesis(username):
     if request.method == 'POST':
         keyword = request.form['keyword']
@@ -88,7 +87,7 @@ def searchthesis(username):
                              message="No results found" if not thesis else None)
     return render_template('searchthesis.html', username=username)
 
-@app.route('/downloadthesis/<string:username>', methods=['GET', 'POST'])
+@datauser_bp.route('/downloadthesis/<string:username>', methods=['GET', 'POST'])
 def downloadthesis(username):
     if request.method == 'POST':
         keyword = request.form['keyword']
@@ -99,11 +98,11 @@ def downloadthesis(username):
                              message="No results found" if not thesis else None)
     return render_template('downloadthesis.html', username=username)
 
-@app.route('/download/<title>')
+@datauser_bp.route('/download/<title>')
 def download_thesis(title):
     return send_from_directory('static/thesis', f"{title}.pdf", as_attachment=True)
 
-@app.route('/getstudentrecord/<string:username>', methods=['GET', 'POST'])
+@datauser_bp.route('/getstudentrecord/<string:username>', methods=['GET', 'POST'])
 def getstudentrecord(username):
     if request.method == 'POST':
         student_id = request.form.get('student_id')
@@ -120,7 +119,7 @@ def getstudentrecord(username):
                              studentrecords=studentrecords)
     return render_template('getstudentrecord.html', username=username)
 
-@app.route('/checkidentity/<string:username>', methods=['GET', 'POST'])
+@datauser_bp.route('/checkidentity/<string:username>', methods=['GET', 'POST'])
 def checkidentity(username):
     result = None
     if request.method == 'POST':
@@ -139,7 +138,7 @@ def checkidentity(username):
                          username=username, 
                          result=result)
 
-@app.route('/seekhelp/<string:username>', methods=['GET', 'POST'])
+@datauser_bp.route('/seekhelp/<string:username>', methods=['GET', 'POST'])
 def seekhelp(username):
     if request.method == 'POST':
         question = request.form['question']
@@ -148,15 +147,15 @@ def seekhelp(username):
     # Redirect to a success page
     return render_template('seekhelp.html', username = username)
 
-@app.route('/payment/<string:username>')
+@datauser_bp.route('/payment/<string:username>')
 def payment(username):
     return render_template('payment.html', username = username)
 
-@app.route('/transfer/<string:username>')
+@datauser_bp.route('/transfer/<string:username>')
 def transfer(username):
     return render_template('transfer.html', username = username)
 
-@app.route('/process_payment/<string:username>', methods=['POST'])
+@datauser_bp.route('/process_payment/<string:username>', methods=['POST'])
 def process_payment(username):
     if request.method == 'POST':
         amount = float(request.form['amount'])
@@ -168,9 +167,6 @@ def process_payment(username):
             return render_template('payfailure.html', username = username)
     return redirect(url_for('transfer', username = username))
 
-@app.route('/vipservice/<string:username>')
+@datauser_bp.route('/vipservice/<string:username>')
 def vipservice(username):
     return render_template('vipservice.html', username = username)
-    
-if __name__ == '__main__':
-    app.run(debug=True)
