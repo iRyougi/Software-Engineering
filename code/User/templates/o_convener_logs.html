@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organization Activity Logs</title>
+</head>
+<body>
+    <h1>Activity Logs for Your Organization</h1>
+    <form method="get">
+        <label>Activity:</label>
+        <input type="text" name="activity" value="{{ request.args.get('activity', '') }}">
+        <label>User Name:</label>
+        <input type="text" name="username_filter" value="{{ request.args.get('username_filter', '') }}">
+        <label>Date:</label>
+        <input type="date" name="date" value="{{ request.args.get('date', '') }}">
+        <button type="submit">Filter</button>
+    </form>
+    <table border="1">
+        <tr>
+            <th>Timestamp</th>
+            <th>User Name</th>
+            <th>Activity</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.username }}</td>
+            <td>{{ log.activity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{{ url_for('O_convener', username=username) }}">Back to Dashboard</a></p>
+</body>
+</html>

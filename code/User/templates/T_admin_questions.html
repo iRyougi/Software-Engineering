@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question Management</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .unanswered {
+            background-color: #ffe6e6;
+        }
+        .answer-form {
+            margin-top: 10px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Question Management</h1>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Submit Time</th>
+            <th>Response Time</th>
+            <th>Response</th>
+            <th>Action</th>
+        </tr>
+        {% for question in questions %}
+        <tr class="{{ 'unanswered' if not question.response_time }}">
+            <td>{{ question.title }}</td>
+            <td>{{ question.description }}</td>
+            <td>{{ question.email }}</td>
+            <td>{{ question.user_role }}</td>
+            <td>{{ question.submit_time }}</td>
+            <td>{{ question.response_time or 'Not answered' }}</td>
+            <td>{{ question.response or 'No response yet' }}</td>
+            <td>
+                {% if not question.response_time %}
+                <form class="answer-form" action="{{ url_for('answer_question', question_id=question.question_id) }}" method="POST">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <textarea name="response" required></textarea>
+                    <button type="submit">Submit Response</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{{ url_for('T_admin', username=username) }}">Back to Admin Panel</a></p>
+</body>
+</html>

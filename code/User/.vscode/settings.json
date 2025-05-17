@@ -1,0 +1,7 @@
+{
+    "python.REPL.enableREPLSmartSend": false,
+    "ocaml.sandbox": {
+        "kind": "opam",
+        "switch": "COMP4233"
+    }
+}

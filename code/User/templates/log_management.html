@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activity Log Management</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        form { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Activity Log Management (E‑Admin: {{ username }})</h1>
+    <form method="GET" action="{{ url_for('view_logs', username=username) }}">
+        <label for="username_filter">Username:</label>
+        <input type="text" name="username_filter" id="username_filter">
+        <label for="activity">Activity:</label>
+        <input type="text" name="activity" id="activity">
+        <label for="organization">Organization:</label>
+        <input type="text" name="organization" id="organization">
+        <label for="date">Date (YYYY-MM-DD):</label>
+        <input type="text" name="date" id="date">
+        <button type="submit">Filter Logs</button>
+    </form>
+    
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Organization</th>
+            <th>Activity</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.id }}</td>
+            <td>{{ log.username }}</td>
+            <td>{{ log.organization }}</td>
+            <td>{{ log.activity }}</td>
+            <td>{{ log.timestamp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{{ url_for('E_admin', username=username) }}">Back to E_admin Panel</a></p>
+</body>
+</html>

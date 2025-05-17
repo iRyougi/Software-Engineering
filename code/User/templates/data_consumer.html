@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Consumer Workspace Search</title>
+</head>
+<body>
+    <h1>Welcome, {{ username }} (Data Consumer)</h1>
+    <form method="get" action="{{ url_for('search_workspace', username=username) }}">
+        <label>Search Organization Workspace:</label>
+        <input type="text" name="org_query" placeholder="Enter organization name" required>
+        <button type="submit">Search</button>
+    </form>
+    {% if workspaces %}
+        <h2>Search Results:</h2>
+        <ul>
+        {% for ws in workspaces %}
+            <li>
+                {{ ws.organization }}
+                <a href="{{ url_for('workspace', username=username, organization=ws.organization) }}">Go to Workspace</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+</body>
+</html>
