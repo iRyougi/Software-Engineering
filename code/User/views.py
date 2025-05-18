@@ -7,6 +7,7 @@ from io import BytesIO
 import pandas as pd
 from User.dataclass_user import DataUser
 from flask_mail import Mail
+from datetime import datetime
 
 user_bp = Blueprint('user_bp', __name__, template_folder='templates') 
 
@@ -146,12 +147,36 @@ def send_verification_code():
 #E_admin page
 @user_bp.route('/E_admin/<string:username>')
 def E_admin(username):
-    return render_template('E_admin.html', username = username)
+    # Get the E_admin's email from user table
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT email FROM user WHERE username=%s", (username,))
+    user_row = cursor.fetchone()
+    eadmin_email = user_row['email'] if user_row and user_row['email'] else username
+
+    # Fetch inbox emails for this E_admin
+    cursor.execute("SELECT sender, subject, body, sent_at FROM emails WHERE recipient=%s ORDER BY sent_at DESC", (eadmin_email,))
+    inbox_emails = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('E_admin.html', username=username, inbox_emails=inbox_emails)
 
 #Senior E_admin page
 @user_bp.route('/Senior_admin/<string:username>')
 def Senior_admin(username):
-    return render_template('Senior_admin.html', username = username)
+    # Get the senior admin's email from user table
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT email FROM user WHERE username=%s", (username,))
+    user_row = cursor.fetchone()
+    senior_email = user_row['email'] if user_row and user_row['email'] else username
+
+    # Fetch inbox emails for this senior admin
+    cursor.execute("SELECT sender, subject, body, sent_at FROM emails WHERE recipient=%s ORDER BY sent_at DESC", (senior_email,))
+    inbox_emails = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('Senior_admin.html', username=username, inbox_emails=inbox_emails)
 
 #Review Application (E_admin) 
 @user_bp.route('/applicationreview/<string:username>')
@@ -282,13 +307,13 @@ def adminindex():
             if user['usertype'] == 'datauser':
                 return render_template('datauser.html', username=username)
             elif user['usertype'] == 'O_convener':
-                return render_template('O_convener.html', username=username)
+                return redirect(url_for('user_bp.O_convener', username=username))
             elif user['usertype'] == 'T_admin':
                 return render_template('T_admin.html', username=username)
             elif user['usertype'] == 'Senior_admin':
-                return render_template('Senior_admin.html', username=username)
+                return redirect(url_for('user_bp.Senior_admin', username=username))
             elif user['usertype'] == 'E_admin':
-                return render_template('E_admin.html', username=username)
+                return redirect(url_for('user_bp.E_admin', username=username))
             elif user['usertype'] == 'Data_consumer':
                 return render_template('data_consumer.html', username=username)
         else:
@@ -514,20 +539,19 @@ def preview_policy(policy_id, username):
 #O_convener page
 @user_bp.route('/O_convener/<string:username>')
 def O_convener(username):
-    # Get organization full name for this convener
-    connection_org = get_db_connection()
-    cursor_org = connection_org.cursor(dictionary=True)
-    query_org = "SELECT fullname FROM registerapplication WHERE email = %s ORDER BY id DESC LIMIT 1"
-    cursor_org.execute(query_org, (username,))
-    result_org = cursor_org.fetchone()
-    cursor_org.close()
-    connection_org.close()
-    if result_org and result_org['fullname']:
-        organization = result_org['fullname']
-    else:
-        organization = "Unknown"
+    # Get the convener's email from user table
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT email FROM user WHERE username=%s", (username,))
+    user_row = cursor.fetchone()
+    convener_email = user_row['email'] if user_row and user_row['email'] else username
 
-    return render_template('O_convener.html', username = username, organization=organization)
+    # Fetch inbox emails for this convener
+    cursor.execute("SELECT sender, subject, body, sent_at FROM emails WHERE recipient=%s ORDER BY sent_at DESC", (convener_email,))
+    inbox_emails = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return render_template('O_convener.html', username=username, inbox_emails=inbox_emails)
 
 @user_bp.route('/upload_members_page/<string:username>')
 def upload_members_page(username):
@@ -877,3 +901,40 @@ def workspace(username, organization):
         flash('Workspace not found.', 'error')
         return redirect(url_for('user_bp.data_consumer', username=username))
     return render_template('workspace.html', username=username, organization=organization, workspace=workspace, user_level=user_level)
+
+@user_bp.route('/send_email/<string:username>', methods=['POST'])
+def send_email(username):
+    recipient = request.form['recipient']
+    subject = request.form['subject']
+    body = request.form['body']
+
+    # Get sender's email from user table
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT email, usertype FROM user WHERE username=%s", (username,))
+    user_row = cursor.fetchone()
+    sender_email = user_row['email'] if user_row and user_row['email'] else username
+    usertype = user_row['usertype'] if user_row and user_row['usertype'] else ""
+
+    # Insert into emails table
+    cursor2 = connection.cursor()
+    query = "INSERT INTO emails (sender, recipient, subject, body, sent_at) VALUES (%s, %s, %s, %s, %s)"
+    cursor2.execute(query, (sender_email, recipient, subject, body, datetime.now()))
+    connection.commit()
+    cursor2.close()
+
+    # Fetch inbox emails for the sender (for inbox display)
+    cursor.execute("SELECT sender, subject, body, sent_at FROM emails WHERE recipient=%s ORDER BY sent_at DESC", (sender_email,))
+    inbox_emails = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    # Render the correct template based on usertype
+    if usertype == "E_admin":
+        return render_template('E_admin.html', username=username, inbox_emails=inbox_emails, email_success="Email sent successfully!")
+    elif usertype == "O_convener":
+        return render_template('O_convener.html', username=username, inbox_emails=inbox_emails, email_success="Email sent successfully!")
+    elif usertype == "Senior_admin":
+        return render_template('Senior_admin.html', username=username, inbox_emails=inbox_emails, email_success="Email sent successfully!")
+    else:
+        return redirect(url_for('user_bp.adminindex'))
