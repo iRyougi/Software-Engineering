@@ -26,7 +26,7 @@ def login():#用数据库确定登录者是否为管理员
         
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
+        cursor.execute('SELECT * FROM user WHERE username = %s AND password = %s AND user_type = %s AND permission_level = %s',(username, password, 'Data_Provider', 3))
         user = cursor.fetchone()
         cursor.close()
         conn.close()
