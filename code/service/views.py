@@ -32,7 +32,7 @@ def login():#用数据库确定登录者是否为管理员
         conn.close()
         
         if user:
-            return redirect(url_for('user_bp.index'))
+            return redirect(url_for('service_bp.portal'))
         else:
             return render_template('login.html', error="Invalid credentials")
     
@@ -42,9 +42,9 @@ def login():#用数据库确定登录者是否为管理员
 def home():#重定向至主页
     return redirect(url_for('service_bp.login'))
 
-@service_bp.route('/index')
-def index():
-    return render_template('index.html')#5.14新增主界面渲染
+@service_bp.route('/portal')
+def portal():
+    return render_template('portal.html')#5.14新增主界面渲染
 
 @service_bp.route('/courses', methods=['GET'])
 def course_page():

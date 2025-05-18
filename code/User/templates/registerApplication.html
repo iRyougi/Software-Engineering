@@ -47,7 +47,7 @@
                 return;
             }
 
-            fetch('{{ url_for("send_verification_code") }}', {
+            fetch('{{ url_for("user_bp.send_verification_code") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

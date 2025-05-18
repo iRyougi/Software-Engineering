@@ -264,8 +264,8 @@ def T_admin(username):
     return render_template('T_admin.html', username = username)
 
 # Route to display login page
-@user_bp.route('/index', methods=['GET', 'POST'])
-def index():
+@user_bp.route('/adminindex', methods=['GET', 'POST'])
+def adminindex():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -293,13 +293,13 @@ def index():
                 return render_template('data_consumer.html', username=username)
         else:
             return render_template('failure.html')
-    return render_template('index.html')
+    return render_template('adminindex.html')
 
 @user_bp.route('/logout/<string:username>', methods=['GET'])
 def logout(username):
     # Here, add additional logout functionality as needed.
     log_activity(username, "Logout")
-    return redirect(url_for('user_bp.index'))
+    return redirect(url_for('user_bp.adminindex'))
 
 @user_bp.route('/logs/<string:username>', methods=['GET'])
 def view_logs(username):

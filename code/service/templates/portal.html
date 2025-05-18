@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Provider Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Data Management Portal</h1>
+        <p>Select a module to manage</p>
+    </div>
+
+    <div class="nav-container">
+        <a href="/courses" class="nav-button">Course Management</a>
+        <a href="/thesis" class="nav-button">Thesis Management</a>
+        <a href="/gpa" class="nav-button">GPA Management</a>
+        <a href="/login" class="nav-button" style="background-color: #f44336;">Exit</a>
+    </div>
+</body>
+</html>
