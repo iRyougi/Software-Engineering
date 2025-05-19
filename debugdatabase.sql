@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2025-05-19 02:57:21
+-- 生成日期： 2025-05-19 20:51:54
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -44,7 +44,127 @@ INSERT INTO `activityrecord` (`id`, `username`, `action`, `timestamp`) VALUES
 (0, 'Simon', 'Login successfully', '2025-05-19 00:45:43'),
 (0, 'Sam', 'Login successfully', '2025-05-19 00:48:54'),
 (0, 'Sam', 'Login successfully', '2025-05-19 00:53:05'),
-(0, 'Simon', 'Login successfully', '2025-05-19 00:54:22');
+(0, 'Simon', 'Login successfully', '2025-05-19 00:54:22'),
+(0, 'Steven', 'Login successfully', '2025-05-19 12:48:48'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:17:07'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:20:24'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:22:25'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:27:49'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:33:17'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:36:08'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:39:12'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:45:35'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:46:28'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:48:06'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:50:16'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:51:58'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:56:59'),
+(0, 'Steven', 'Login successfully', '2025-05-19 13:58:59'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:04:24'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:11:08'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:17:53'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:26:47'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:50:53'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:53:22'),
+(0, 'Steven', 'Login successfully', '2025-05-19 14:57:07'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:00:09'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:12:52'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:15:38'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:25:52'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:28:50'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:41:42'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:45:31'),
+(0, 'Steven', 'Login successfully', '2025-05-19 15:54:12'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:01:41'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:05:42'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:08:15'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:14:34'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:15:45'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:17:10'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:18:49'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:20:46'),
+(0, 'Steven', 'Pay unsuccessfully', '2025-05-19 16:20:57'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:21:10'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:22:23'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:22:32'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:23:46'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:23:56'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:24:57'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:25:07'),
+(0, 'Steven', 'Browse logs', '2025-05-19 16:25:12'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:28:21'),
+(0, 'Steven', 'Pay unsuccessfully', '2025-05-19 16:28:40'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:28:51'),
+(0, 'Steven', 'Browse logs', '2025-05-19 16:28:55'),
+(0, 'Steven', 'Browse bank accounts', '2025-05-19 16:28:59'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 16:29:02'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 16:29:52'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:30:45'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:30:53'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 16:30:55'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:31:29'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:31:44'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 16:31:46'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:37:54'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:38:08'),
+(0, 'Steven', 'Browse student records', '2025-05-19 16:38:15'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:41:18'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:41:28'),
+(0, 'Steven', 'Browse student records', '2025-05-19 16:41:30'),
+(0, 'Steven', 'Search student record by ID 1 and name John', '2025-05-19 16:41:50'),
+(0, 'Steven', 'Search student record by ID 1 and name John Doe', '2025-05-19 16:42:05'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:48:22'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:48:32'),
+(0, 'Steven', 'Browse student records', '2025-05-19 16:48:37'),
+(0, 'Steven', 'Search student record by ID 1 and name John Doe', '2025-05-19 16:48:50'),
+(0, 'Steven', 'Login successfully', '2025-05-19 16:51:56'),
+(0, 'Steven', 'Pay unsuccessfully', '2025-05-19 16:52:06'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 16:52:16'),
+(0, 'Steven', 'Browse student records', '2025-05-19 16:52:23'),
+(0, 'Steven', 'Search student record by ID 1 and name John Doe', '2025-05-19 16:52:40'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:00:08'),
+(0, 'Steven', 'Pay unsuccessfully', '2025-05-19 17:00:17'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 17:00:25'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:00:27'),
+(0, 'Steven', 'Search student record by ID 1 and name John Doe', '2025-05-19 17:00:42'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:20:58'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 17:21:08'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:21:10'),
+(0, 'Steven', 'Search student record by ID 1 and name John Doe', '2025-05-19 17:21:30'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:21:37'),
+(0, 'Steven', 'Check identity with ID 1, Name John Doe', '2025-05-19 17:27:25'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 17:28:30'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:28:32'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:28:38'),
+(0, 'Steven', 'Check identity with ID 2, Name Jane Smith', '2025-05-19 17:29:08'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:31:53'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 17:32:06'),
+(0, 'Steven', 'Browse student records', '2025-05-19 17:32:08'),
+(0, 'Steven', 'Identity check incomplete for ID 2, Name Jane Smith, No photo provided', '2025-05-19 17:32:24'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:43:35'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:44:20'),
+(0, 'Steven', 'Login successfully', '2025-05-19 17:47:43'),
+(0, 'Steven', 'Pay successfully', '2025-05-19 17:48:29'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 17:48:33'),
+(0, 'Steven', 'Browse bank accounts', '2025-05-19 17:49:03'),
+(0, 'Steven', 'Browse bank accounts', '2025-05-19 17:49:50'),
+(0, 'Steven', 'Browse bank accounts', '2025-05-19 17:49:59'),
+(0, 'Steven', 'Login successfully', '2025-05-19 18:10:38'),
+(0, 'Steven', 'Login successfully', '2025-05-19 18:21:52'),
+(0, 'Steven', 'Login successfully', '2025-05-19 18:27:17'),
+(0, 'Steven', 'Failed transfer: invalid destination account information', '2025-05-19 18:28:41'),
+(0, 'Steven', 'Successful transfer of 100 from China Bank/ACCrich to China Bank/ACCPoor', '2025-05-19 18:30:20'),
+(0, 'Steven', 'Login successfully', '2025-05-19 18:32:06'),
+(0, 'Steven', 'Failed transfer: invalid destination account information', '2025-05-19 18:33:03'),
+(0, 'Steven', 'Successful transfer of 11 from China Bank/ACCrich to China Bank/ACCpoor', '2025-05-19 18:33:15'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 18:33:18'),
+(0, 'Steven', 'Search thesis by keyword \'Thesis_test\'', '2025-05-19 18:37:49'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 18:38:00'),
+(0, 'Steven', 'Search thesis by keyword \'Thesis_test\'', '2025-05-19 18:38:09'),
+(0, 'Steven', 'Search thesis by keyword \'Thesis_test\'', '2025-05-19 18:38:42'),
+(0, 'Steven', 'Browse thesis', '2025-05-19 18:40:41'),
+(0, 'Steven', 'Browse logs', '2025-05-19 18:40:53'),
+(0, 'Steven', 'Browse bank accounts', '2025-05-19 18:40:58');
 
 -- --------------------------------------------------------
 
@@ -128,19 +248,20 @@ INSERT INTO `activity_logs` (`id`, `username`, `organization`, `activity`, `time
 
 CREATE TABLE `bankaccount` (
   `id` int(11) NOT NULL,
-  `account` varchar(30) NOT NULL,
-  `balance` decimal(15,2) DEFAULT 0.00,
-  `password` varchar(60) NOT NULL
+  `bank` varchar(100) NOT NULL,
+  `account_name` varchar(100) NOT NULL,
+  `account_number` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- 转存表中的数据 `bankaccount`
 --
 
-INSERT INTO `bankaccount` (`id`, `account`, `balance`, `password`) VALUES
-(1, 'ACCrich', 999999.99, '123'),
-(2, 'ACCpoor', 20.75, '456'),
-(3, 'ProjectFundSDW', 5000000.00, '789');
+INSERT INTO `bankaccount` (`id`, `bank`, `account_name`, `account_number`, `password`) VALUES
+(1, 'China Bank', 'Rich Person', 'ACCrich', '123'),
+(2, 'China Bank', 'Poor Person', 'ACCpoor', '456'),
+(3, 'UIC Bank', 'SDW Project', 'ProjectFundSDW', '789');
 
 -- --------------------------------------------------------
 
@@ -323,6 +444,39 @@ INSERT INTO `registerapplication` (`id`, `email`, `fullname`, `shortname`, `file
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `studentrecord`
+--
+
+CREATE TABLE `studentrecord` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `gender` enum('Male','Female','Other') NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `enrollment_year` year(4) NOT NULL,
+  `graduation_year` year(4) NOT NULL,
+  `gpa` decimal(3,2) NOT NULL,
+  `photo_path` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 转存表中的数据 `studentrecord`
+--
+
+INSERT INTO `studentrecord` (`id`, `name`, `gender`, `date_of_birth`, `enrollment_year`, `graduation_year`, `gpa`, `photo_path`) VALUES
+(1, 'John Doe', 'Male', '2000-05-15', '2019', '2023', 3.75, '/photos/john_doe.jpg'),
+(2, 'Jane Smith', 'Female', '2001-03-22', '2020', '2024', 3.89, '/photos/jane_smith.jpg'),
+(3, 'Alex Johnson', 'Male', '1999-11-08', '2018', '2022', 3.45, '/photos/alex_johnson.jpg'),
+(4, 'Emily Brown', 'Female', '2002-07-30', '2021', '2025', 3.92, '/photos/emily_brown.jpg'),
+(5, 'Sam Wilson', 'Male', '2000-02-14', '2019', '2023', 3.23, '/photos/sam_wilson.jpg'),
+(6, 'Olivia Davis', 'Female', '2001-09-17', '2020', '2024', 3.67, '/photos/olivia_davis.jpg'),
+(7, 'Ryan Miller', 'Male', '1999-06-25', '2018', '2022', 3.55, '/photos/ryan_miller.jpg'),
+(8, 'Sophia Garcia', 'Female', '2002-01-05', '2021', '2025', 3.78, '/photos/sophia_garcia.jpg'),
+(9, 'James Rodriguez', 'Male', '2000-12-03', '2019', '2023', 3.41, '/photos/james_rodriguez.jpg'),
+(10, 'Emma Martinez', 'Female', '2001-04-11', '2020', '2024', 3.86, '/photos/emma_martinez.jpg');
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `student_gpa`
 --
 
@@ -365,6 +519,32 @@ CREATE TABLE `thesis` (
 
 INSERT INTO `thesis` (`id`, `title`, `author`, `upload_date`, `file_path`, `description`, `organization`) VALUES
 (4, 'Thesis_test', 'Justin', '2025-05-19 08:10:10', 'TEST.pdf', 'Testing', 'United International College');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `transfer`
+--
+
+CREATE TABLE `transfer` (
+  `id` int(11) NOT NULL,
+  `from_bank` varchar(100) NOT NULL,
+  `from_name` varchar(100) NOT NULL,
+  `from_account` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `to_bank` varchar(100) NOT NULL,
+  `to_name` varchar(100) NOT NULL,
+  `to_account` varchar(50) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 转存表中的数据 `transfer`
+--
+
+INSERT INTO `transfer` (`id`, `from_bank`, `from_name`, `from_account`, `password`, `to_bank`, `to_name`, `to_account`, `amount`) VALUES
+(1, 'China Bank', 'Rich Person', 'ACCrich', '123', 'China Bank', 'Poor Person', 'ACCPoor', 100),
+(2, 'China Bank', 'Rich Person', 'ACCrich', '123', 'China Bank', 'Poor Person', 'ACCpoor', 11);
 
 -- --------------------------------------------------------
 
@@ -475,6 +655,12 @@ ALTER TABLE `activity_logs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `bankaccount`
+--
+ALTER TABLE `bankaccount`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `courses`
 --
 ALTER TABLE `courses`
@@ -519,6 +705,12 @@ ALTER TABLE `registerapplication`
   ADD PRIMARY KEY (`id`);
 
 --
+-- 表的索引 `studentrecord`
+--
+ALTER TABLE `studentrecord`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `student_gpa`
 --
 ALTER TABLE `student_gpa`
@@ -528,6 +720,12 @@ ALTER TABLE `student_gpa`
 -- 表的索引 `thesis`
 --
 ALTER TABLE `thesis`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 表的索引 `transfer`
+--
+ALTER TABLE `transfer`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -566,6 +764,12 @@ ALTER TABLE `activity_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
+-- 使用表AUTO_INCREMENT `bankaccount`
+--
+ALTER TABLE `bankaccount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- 使用表AUTO_INCREMENT `courses`
 --
 ALTER TABLE `courses`
@@ -602,10 +806,22 @@ ALTER TABLE `registerapplication`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- 使用表AUTO_INCREMENT `studentrecord`
+--
+ALTER TABLE `studentrecord`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- 使用表AUTO_INCREMENT `thesis`
 --
 ALTER TABLE `thesis`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- 使用表AUTO_INCREMENT `transfer`
+--
+ALTER TABLE `transfer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- 使用表AUTO_INCREMENT `user`
