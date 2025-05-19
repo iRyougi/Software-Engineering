@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPA Management (View Only)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gpa.css') }}">
+</head>
+<body>
+    <div class="search-container" style="margin: 20px 0;">
+        <label for="orgSearch">Filter by Organization:</label>
+        <input type="text" id="orgSearch" placeholder="Enter organization name">
+        <button onclick="loadGPA()">Search</button>
+    </div>
+    <h3>GPA Records</h3>
+    <table id="gpaTable">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>GPA</th>
+                <th>Organization</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        function loadGPA() {
+            const org = document.getElementById('orgSearch').value;
+            let url = '/api/gpa';
+            if (org) {
+                url += `?organization=${encodeURIComponent(org)}`;
+            }
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#gpaTable tbody');
+                    tbody.innerHTML = '';
+                    data.data.forEach(record => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${record.student_id}</td>
+                                <td>${record.name}</td>
+                                <td>${record.grade}</td>
+                                <td>${record.gpa}</td>
+                                <td>${record.organization || ''}</td>
+                            </tr>
+                        `;
+                    });
+                });
+        }
+        window.onload = loadGPA;
+    </script>
+</body>
+</html>

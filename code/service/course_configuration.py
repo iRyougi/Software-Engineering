@@ -15,14 +15,15 @@ class Course_configuration:
             CREATE TABLE IF NOT EXISTS courses (
                 id INT PRIMARY KEY,
                 course_name VARCHAR(255) NOT NULL UNIQUE,
-                description TEXT  
+                description TEXT,
+                organization VARCHAR(255)
             )
         ''')
         conn.commit()
         cursor.close()
         conn.close()
 
-    def add_course(self, course_id, course_name, description):#添加新课程并处理ID和课程名重复的情况
+    def add_course(self, course_id, course_name, description, organization):  # add organization
         conn = self._get_connection()
         cursor = conn.cursor()
         try:
@@ -31,8 +32,8 @@ class Course_configuration:
                 raise ValueError(f"Course ID {course_id} already exists")
 
             cursor.execute(
-                'INSERT INTO courses (id, course_name, description) VALUES (%s, %s, %s)',  
-                (course_id, course_name, description)  
+                'INSERT INTO courses (id, course_name, description, organization) VALUES (%s, %s, %s, %s)',
+                (course_id, course_name, description, organization)
             )
             conn.commit()
         except mysql.connector.IntegrityError as e:
@@ -44,7 +45,7 @@ class Course_configuration:
             cursor.close()
             conn.close()
 
-    def edit_course(self, old_id, new_id, new_name, new_description):#编辑课程信息，处理编辑过程中ID修改和名称修改后和已有课程重复的情况
+    def edit_course(self, old_id, new_id, new_name, new_description, new_organization):  # add organization
         conn = self._get_connection()
         cursor = conn.cursor()
         try:
@@ -54,8 +55,8 @@ class Course_configuration:
                     raise ValueError(f"CourseID {new_id} already exists")
 
             cursor.execute(
-                'UPDATE courses SET id = %s, course_name = %s, description = %s WHERE id = %s',
-                (new_id, new_name, new_description, old_id)
+                'UPDATE courses SET id = %s, course_name = %s, description = %s, organization = %s WHERE id = %s',
+                (new_id, new_name, new_description, new_organization, old_id)
             )
             if cursor.rowcount == 0:
                 raise ValueError("Course is not exist")
@@ -87,6 +88,15 @@ class Course_configuration:
         conn = self._get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('SELECT * FROM courses')
+        courses = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return courses
+
+    def get_courses_by_organization(self, organization):
+        conn = self._get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM courses WHERE organization = %s', (organization,))
         courses = cursor.fetchall()
         cursor.close()
         conn.close()

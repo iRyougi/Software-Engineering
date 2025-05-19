@@ -7,39 +7,67 @@ class GPA_management:
 
     def _get_connection(self):
         return mysql.connector.connect(**self.db_config)
-    
-    def _create_table(self):#初始化时如果没有gpa数据表会进行创建
+
+    def _create_table(self):
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS student_gpa (
-                student_id VARCHAR(20) PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                grade VARCHAR(20) NOT NULL,
-                gpa DECIMAL(3,2) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            CREATE TABLE IF NOT EXISTS gpa_records (
+                student_id VARCHAR(50) PRIMARY KEY,
+                name VARCHAR(255),
+                grade VARCHAR(50),
+                gpa FLOAT,
+                organization VARCHAR(255)
             )
         ''')
         conn.commit()
         cursor.close()
-        conn.close()    
+        conn.close()
 
-    def add_gpa_record(self, student_id, name, grade, gpa):#插入gpa信息并处理学号重复异常
+    def add_gpa_record(self, student_id, name, grade, gpa, organization):
         conn = self._get_connection()
         cursor = conn.cursor()
-        try:
-            cursor.execute('''
-                INSERT INTO student_gpa (student_id, name, grade, gpa)
-                VALUES (%s, %s, %s, %s)
-            ''', (student_id, name, grade, gpa))
-            conn.commit()
-        except mysql.connector.IntegrityError:
-            raise ValueError("Student ID already exists")
-        finally:
+        cursor.execute('SELECT student_id FROM student_gpa WHERE student_id = %s', (student_id,))
+        if cursor.fetchone():
             cursor.close()
             conn.close()
+            raise ValueError(f"Student ID {student_id} already exists")
+        cursor.execute(
+            'INSERT INTO student_gpa (student_id, name, grade, gpa, organization) VALUES (%s, %s, %s, %s, %s)',
+            (student_id, name, grade, gpa, organization)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
 
-    def get_all_gpa(self):#查询并返回所有gpa记录至下方表单
+    def edit_gpa_record(self, student_id, name, grade, gpa, organization):
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            'UPDATE student_gpa SET name = %s, grade = %s, gpa = %s, organization = %s WHERE student_id = %s',
+            (name, grade, gpa, organization, student_id)
+        )
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            raise ValueError("GPA record does not exist")
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    def delete_gpa_record(self, student_id):
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM student_gpa WHERE student_id = %s', (student_id,))
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            raise ValueError("GPA record does not exist")
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+    def get_all_gpa(self):
         conn = self._get_connection()
         cursor = conn.cursor(dictionary=True)
         cursor.execute('SELECT * FROM student_gpa')
@@ -48,14 +76,11 @@ class GPA_management:
         conn.close()
         return records
 
-    def delete_gpa_record(self, student_id):#删除gpa记录
+    def get_gpa_by_organization(self, organization):
         conn = self._get_connection()
-        cursor = conn.cursor()
-        try:
-            cursor.execute('DELETE FROM student_gpa WHERE student_id = %s', (student_id,))
-            if cursor.rowcount == 0:
-                raise ValueError("Student record does not exist")
-            conn.commit()
-        finally:
-            cursor.close()
-            conn.close()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM student_gpa WHERE organization = %s', (organization,))
+        records = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return records

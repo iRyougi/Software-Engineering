@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thesis Management (View Only)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/thesis.css') }}">
+</head>
+<body>
+    <div class="search-container" style="margin: 20px 0;">
+        <label for="orgSearch">Filter by Organization:</label>
+        <input type="text" id="orgSearch" placeholder="Enter organization name">
+        <button onclick="loadThesis()">Search</button>
+    </div>
+    <div class="thesis-list">
+        <h3>Thesis List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Organization</th>
+                    <th>Upload Date</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="thesisTable">
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function loadThesis() {
+            const org = document.getElementById('orgSearch').value;
+            let url = '/api/thesis';
+            if (org) {
+                url += `?organization=${encodeURIComponent(org)}`;
+            }
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('thesisTable');
+                tbody.innerHTML = data.data.map(thesis => `
+                    <tr>
+                        <td>${thesis.title}</td>
+                        <td>${thesis.author}</td>
+                        <td>${thesis.organization || ''}</td>
+                        <td>${new Date(thesis.upload_date).toLocaleDateString()}</td>
+                        <td>
+                            <button onclick="downloadThesis('${thesis.file_path}')">Download</button>
+                        </td>
+                    </tr>
+                `).join('');
+            });
+        }
+        function downloadThesis(filePath) {
+            window.open(`/uploads/${filePath}`, '_blank');
+        }
+        window.onload = loadThesis;
+    </script>
+</body>
+</html>

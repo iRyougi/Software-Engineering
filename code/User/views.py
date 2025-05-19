@@ -76,7 +76,7 @@ def registerApplication():
         # Verify the code
         if email not in verification_codes or verification_codes[email] != verification_code:
             flash('Invalid or missing verification code.', 'error')
-            return redirect(url_for('registerApplication'))
+            return redirect(url_for('user_bp.registerApplication'))
 
         # Validate the uploaded file
         if proof and proof.filename.endswith('.pdf'):
@@ -87,10 +87,10 @@ def registerApplication():
                 proof_data = proof.read()
             except Exception as e:
                 flash('Invalid PDF file: ' + str(e), 'error')
-                return redirect(url_for('registerApplication'))
+                return redirect(url_for('user_bp.registerApplication'))
         else:
             flash('Please upload a valid PDF file.', 'error')
-            return redirect(url_for('registerApplication'))
+            return redirect(url_for('user_bp.registerApplication'))
 
         # Connect to the database
         connection = get_db_connection()
@@ -106,7 +106,7 @@ def registerApplication():
                 INSERT INTO user (username, password, email, usertype, level)
                 VALUES (%s, %s, %s, %s, %s)
             """
-            cursor.execute(user_query, (email, verification_code, email, 'O_convener', 3))
+            cursor.execute(user_query, (email, verification_code, email, 'O_convener', 0))
 
             # Commit the transaction
             connection.commit()
@@ -119,7 +119,7 @@ def registerApplication():
             cursor.close()
             connection.close()
 
-        return redirect(url_for('registerApplication'))
+        return redirect(url_for('user_bp.registerApplication'))
 
     return render_template('registerApplication.html')
 
@@ -212,7 +212,7 @@ def seniorapplicationreview(username):
     for application in applications:
         if application['file']:
             # Create a unique route for each file preview
-            application['file_url'] = url_for('preview_pdf', shortname=application['shortname'])
+            application['file_url'] = url_for('user_bp.preview_pdf', shortname=application['shortname'])
 
     return render_template('seniorapplicationreview.html', applications=applications, username=username)
 
@@ -232,24 +232,32 @@ def preview_pdf(shortname):
         return send_file(BytesIO(result['file']), mimetype='application/pdf', download_name=f"{shortname}.pdf")
     else:
         flash("PDF file not found.", "error")
-        return redirect(url_for('applicationreview'))
+        return redirect(url_for('user_bp.applicationreview'))
 
 #E_admin : accept registration application
 @user_bp.route('/accept_application/<string:shortname>', methods=['POST'])
 def accept_application(shortname):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    # Increment the "status" value by one
-    query = """
-        UPDATE registerapplication
-        SET status = status + 1
-        WHERE shortname = %s
-    """
-    cursor.execute(query, (shortname,))
-    connection.commit()
-    cursor.close()
-    connection.close()
-    return redirect(url_for('applicationreview', username=request.args.get('username')))
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        query = """
+            UPDATE registerapplication
+            SET status = status + 1
+            WHERE shortname = %s
+        """
+        cursor.execute(query, (shortname,))
+        connection.commit()
+        updated = cursor.rowcount
+        cursor.close()
+        connection.close()
+        if updated == 0:
+            # No rows updated, likely shortname not found
+            flash("No application found for shortname: {}".format(shortname), "error")
+        else:
+            flash("Application accepted.", "success")
+    except Exception as e:
+        flash("Error updating application: {}".format(e), "error")
+    return redirect(url_for('user_bp.applicationreview', username=request.args.get('username')))
 
 #Senior E_admin : accept registration application
 @user_bp.route('/senioraccept_application/<string:shortname>', methods=['POST'])
@@ -267,7 +275,7 @@ def senioraccept_application(shortname):
     connection.commit()
     cursor.close()
     connection.close()
-    return redirect(url_for('seniorapplicationreview', username=request.args.get('username')))
+    return redirect(url_for('user_bp.seniorapplicationreview', username=request.args.get('username')))
 
 #Reject registration application
 @user_bp.route('/reject_application/<string:shortname>', methods=['POST'])
@@ -280,7 +288,7 @@ def reject_application(shortname):
     connection.commit()
     cursor.close()
     connection.close()
-    return redirect(url_for('applicationreview', username=request.args.get('username')))
+    return redirect(url_for('user_bp.applicationreview', username=request.args.get('username')))
 
 
 #T_admin page
@@ -418,7 +426,7 @@ def answer_question(question_id):
 
     if not response:
         flash('Response cannot be empty', 'error')
-        return render_template('T_admin_questions.html', questions=question_id, username=username)
+        return render_template('user_bp.T_admin_questions.html', questions=question_id, username=username)
     
     connection = get_db_connection()
     cursor = connection.cursor()
@@ -434,7 +442,7 @@ def answer_question(question_id):
     cursor.close()
     connection.close()
     
-    return redirect(url_for('T_admin_questions', username=username))
+    return redirect(url_for('user_bp.T_admin_questions', username=username))
 
 # Route to manage policies
 @user_bp.route('/manage_policy/<string:username>')
@@ -456,12 +464,12 @@ def add_policy(username):
         policy_file = request.files.get('policy_file')
         if not title or not policy_file or not policy_file.filename.endswith('.pdf'):
             flash('A valid title and PDF file are required.', 'error')
-            return redirect(url_for('add_policy', username=username))
+            return redirect(url_for('user_bp.add_policy', username=username))
         try:
             policy_data = policy_file.read()
         except Exception as e:
             flash("Error reading file: " + str(e), 'error')
-            return redirect(url_for('add_policy', username=username))
+            return redirect(url_for('user_bp.add_policy', username=username))
         connection = get_db_connection()
         cursor = connection.cursor()
         query = "INSERT INTO policies (title, content) VALUES (%s, %s)"
@@ -470,7 +478,7 @@ def add_policy(username):
         cursor.close()
         connection.close()
         flash('Policy added successfully.', 'success')
-        return redirect(url_for('manage_policy', username=username))
+        return redirect(url_for('user_bp.manage_policy', username=username))
     return render_template('add_policy.html', username=username)
 
 # Route to update an existing policy
@@ -492,7 +500,7 @@ def update_policy(policy_id, username):
         cursor.close()
         connection.close()
         flash('Policy updated successfully.', 'success')
-        return redirect(url_for('manage_policy', username=username))
+        return redirect(url_for('user_bp.manage_policy', username=username))
     else:
         cursor = connection.cursor(dictionary=True)
         cursor.execute("SELECT id, title FROM policies WHERE id = %s", (policy_id,))
@@ -503,7 +511,7 @@ def update_policy(policy_id, username):
             return render_template('update_policy.html', policy=policy, username=username)
         else:
             flash('Policy not found.', 'error')
-            return redirect(url_for('manage_policy', username=username))
+            return redirect(url_for('user_bp.manage_policy', username=username))
 
 # Route to delete a policy
 @user_bp.route('/delete_policy/<int:policy_id>/<string:username>', methods=['POST'])
@@ -516,7 +524,7 @@ def delete_policy(policy_id, username):
     cursor.close()
     connection.close()
     flash('Policy deleted successfully.', 'success')
-    return redirect(url_for('manage_policy', username=username))
+    return redirect(url_for('user_bp.manage_policy', username=username))
 
 # New route to preview a policy PDF file by its id
 @user_bp.route('/preview_policy/<int:policy_id>/<string:username>')
@@ -534,7 +542,7 @@ def preview_policy(policy_id, username):
                          download_name=f"{policy['title']}.pdf")
     else:
         flash("PDF file not found.", "error")
-        return redirect(url_for('manage_policy', username=username))
+        return redirect(url_for('user_bp.manage_policy', username=username))
     
 #O_convener page
 @user_bp.route('/O_convener/<string:username>')
@@ -597,11 +605,11 @@ def upload_members(username):
     if request.method == 'POST':
         if 'excel_file' not in request.files:
             flash('No file part', 'error')
-            return redirect(url_for('upload_members', username=username))
+            return redirect(url_for('user_bp.upload_members', username=username))
         file = request.files['excel_file']
         if file.filename == '':
             flash('No selected file', 'error')
-            return redirect(url_for('upload_members', username=username))
+            return redirect(url_for('user_bp.upload_members', username=username))
         if file and file.filename.endswith(('.xls', '.xlsx')):
             try:
                 # Retrieve the o-convener's organization full name from registerapplication table
@@ -647,7 +655,7 @@ def upload_members(username):
                 flash('Error processing file: ' + str(e), 'error')
         else:
             flash('Please upload a valid Excel file.', 'error')
-        return redirect(url_for('O_convener', username=username))
+        return redirect(url_for('user_bp.O_convener', username=username))
     return render_template('upload_members.html', username=username)
 
 # Route to add an individual member
@@ -683,7 +691,7 @@ def add_member(username):
         finally:
             cursor.close()
             connection.close()
-        return redirect(url_for('manage_members', username=username))
+        return redirect(url_for('user_bp.manage_members', username=username))
     return render_template('add_member.html', username=username)
 
 # Route to edit an individual member
@@ -719,7 +727,7 @@ def edit_member(member_id, username):
         finally:
             cursor.close()
             connection.close()
-        return redirect(url_for('manage_members', username=username))
+        return redirect(url_for('user_bp.manage_members', username=username))
     else:
         query = "SELECT * FROM e_dba_members WHERE id=%s"
         cursor.execute(query, (member_id,))
@@ -730,7 +738,7 @@ def edit_member(member_id, username):
             return render_template('edit_member.html', member=member, username=username)
         else:
             flash('Member not found.', 'error')
-            return redirect(url_for('manage_members', username=username))
+            return redirect(url_for('user_bp.manage_members', username=username))
 
 # Route to delete an individual member
 @user_bp.route('/delete_member/<int:member_id>/<string:username>', methods=['POST'])
@@ -748,7 +756,7 @@ def delete_member(member_id, username):
     finally:
         cursor.close()
         connection.close()
-    return redirect(url_for('manage_members', username=username))
+    return redirect(url_for('user_bp.manage_members', username=username))
 
 @user_bp.route('/banking_info/<string:username>', methods=['GET', 'POST'])
 def banking_info(username):
@@ -782,7 +790,7 @@ def banking_info(username):
         connection.commit()
         cursor.close()
         connection.close()
-        return redirect(url_for('O_convener', username=username))
+        return redirect(url_for('user_bp.O_convener', username=username))
     else:
         cursor.close()
         connection.close()

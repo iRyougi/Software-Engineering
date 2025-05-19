@@ -91,18 +91,21 @@
         // Accept application
         function acceptApplication() {
             if (currentShortname) {
-                fetch(`/accept_application/${currentShortname}`, {
+                console.log('Accepting:', currentShortname);
+                fetch(`/user/accept_application/${currentShortname}`, {
                     method: 'POST'
                 }).then(() => {
-                    location.reload(); // Reload the page after the action
+                    location.reload();
                 });
+            } else {
+                console.log('No shortname selected');
             }
         }
 
         // Reject application
         function rejectApplication() {
             if (currentShortname) {
-                fetch(`/reject_application/${currentShortname}`, {
+                fetch(`/user/reject_application/${currentShortname}`, {
                     method: 'POST'
                 }).then(() => {
                     location.reload(); // Reload the page after the action
@@ -130,8 +133,8 @@
         <div class="application-details">
             <h2>Application Details</h2>
             <p><strong>Email:</strong> <span id="details-email">Select an application</span></p>
-            <p><strong>Full Name:</strong> <span id="details-fullname">N/A</span></p>
-            <p><strong>Short Name:</strong> <span id="details-shortname">N/A</span></p>
+            <p><strong>Organization Full Name:</strong> <span id="details-fullname">N/A</span></p>
+            <p><strong>Organization Short Name:</strong> <span id="details-shortname">N/A</span></p>
             <embed id="pdf-preview" class="pdf-preview" src="" type="application/pdf" />
 
             <!-- Action buttons -->

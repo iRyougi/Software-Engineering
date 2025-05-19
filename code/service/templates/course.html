@@ -10,9 +10,16 @@
         <input type="number" id="courseId" placeholder="Course ID (e.g., 1001)" required>
         <input type="text" id="courseName" placeholder="Course Name" required>
         <textarea id="courseDesc" placeholder="Course Description"></textarea>
+        <input type="text" id="organization" placeholder="Organization" required>
         <button onclick="addCourse()">Add Course</button>
     </div>
-
+    <hr>
+    <div class="search-container" style="margin: 20px 0;">
+        <label for="orgSearch">Filter by Organization:</label>
+        <input type="text" id="orgSearch" placeholder="Enter organization name">
+        <button onclick="loadCourses()">Search</button>
+    </div>
+    <hr>
     <h3>Course List</h3>
     <table id="coursesTable">
         <thead>
@@ -20,6 +27,7 @@
                 <th>ID</th>
                 <th>Course Name</th>
                 <th>Description</th>
+                <th>Organization</th>
                 <th>Operations</th>
             </tr>
         </thead>
@@ -30,7 +38,12 @@
     <script>
         // 获取课程数据并动态生成表格
         function loadCourses() {
-            fetch('/api/courses')
+            const org = document.getElementById('orgSearch').value;
+            let url = '/api/courses';
+            if (org) {
+                url += `?organization=${encodeURIComponent(org)}`;
+            }
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
@@ -42,8 +55,9 @@
                                     <td>${course.id}</td>
                                     <td>${course.course_name}</td>
                                     <td>${course.description || 'No description'}</td>
+                                    <td>${course.organization || ''}</td>
                                     <td>
-                                        <button onclick="editCourse(${course.id}, '${course.course_name}', '${course.description}')">Edit</button>
+                                        <button onclick="editCourse(${course.id}, '${course.course_name}', '${course.description}', '${course.organization}')">Edit</button>
                                         <button onclick="deleteCourse(${course.id})">Delete</button>
                                     </td>
                                 </tr>
@@ -58,9 +72,10 @@
             const courseId = document.getElementById('courseId').value;
             const courseName = document.getElementById('courseName').value;
             const courseDesc = document.getElementById('courseDesc').value;
-            
-            if (!courseId || !courseName) {
-                alert("ID and Course Name cannot be empty!");
+            const org = document.getElementById('organization').value;
+
+            if (!courseId || !courseName || !org) {
+                alert("ID, Course Name, and Organization cannot be empty!");
                 return;
             }
 
@@ -69,7 +84,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `course_id=${encodeURIComponent(courseId)}&course_name=${encodeURIComponent(courseName)}&description=${encodeURIComponent(courseDesc)}`
+                body: `course_id=${encodeURIComponent(courseId)}&course_name=${encodeURIComponent(courseName)}&description=${encodeURIComponent(courseDesc)}&organization=${encodeURIComponent(org)}`
             })
             .then(response => response.json())
             .then(result => {
@@ -78,6 +93,7 @@
                     document.getElementById('courseId').value = '';
                     document.getElementById('courseName').value = '';
                     document.getElementById('courseDesc').value = '';
+                    document.getElementById('organization').value = '';
                     loadCourses();
                 }
             });
@@ -100,18 +116,19 @@
         }
 
         // 编辑课程并提交更新
-        function editCourse(oldId, currentName, currentDesc) {
+        function editCourse(oldId, currentName, currentDesc, currentOrg) {
             const newId = prompt('Enter new course ID:', oldId);
             const newName = prompt('Enter new course name:', currentName);
             const newDesc = prompt('Enter new course description:', currentDesc || '');
-            
-            if (newId && newName && (newId != oldId || newName !== currentName || newDesc !== currentDesc)) {
+            const newOrg = prompt('Enter new organization:', currentOrg || '');
+
+            if (newId && newName && newOrg && (newId != oldId || newName !== currentName || newDesc !== currentDesc || newOrg !== currentOrg)) {
                 fetch(`/edit_course/${oldId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `new_id=${encodeURIComponent(newId)}&new_name=${encodeURIComponent(newName)}&new_description=${encodeURIComponent(newDesc)}`
+                    body: `new_id=${encodeURIComponent(newId)}&new_name=${encodeURIComponent(newName)}&new_description=${encodeURIComponent(newDesc)}&new_organization=${encodeURIComponent(newOrg)}`
                 })
                 .then(response => response.json())
                 .then(result => {
