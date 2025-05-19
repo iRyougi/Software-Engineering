@@ -6,8 +6,8 @@
 <body>
     <h1>Welcome {{ username }} to check thesis!</h1>
     <h2>VIP operations:</h2>
-    <a href="{{ url_for('searchthesis', username=username) }}">Search for thesis</a><br>
-    <a href="{{ url_for('downloadthesis', username=username) }}">Download thesis</a><br>
+    <a href="{{ url_for('datauser_bp.searchthesis', username=username) }}">Search for thesis (for unknown title)</a><br>
+    <a href="{{ url_for('datauser_bp.downloadthesis', username=username) }}">Download thesis (for known title)</a><br>
         <table border="1">
             <thead>
                 <tr>
@@ -27,6 +27,6 @@
             </tbody>
         </table>
     <br>
-    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a>
 </body>
 </html>

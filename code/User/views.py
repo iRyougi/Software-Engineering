@@ -380,6 +380,14 @@ def seekhelp(username):
     # Redirect to a success page
     return render_template('seekhelp.html', username = username)
 
+@user_bp.route('/payment/<string:username>')
+def payment(username):
+    return render_template('payment.html', username = username)
+
+@user_bp.route('/transfer/<string:username>')
+def transfer(username):
+    return render_template('transfer.html', username = username)
+
 @user_bp.route('/view_questions')
 def view_questions():
     # Connect to the database

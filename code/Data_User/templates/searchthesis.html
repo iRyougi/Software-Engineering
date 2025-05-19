@@ -29,6 +29,6 @@
     {% elif message %}
     <p>{{ message }}</p>
     {% endif %}
-    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a><br>
 </body>
 </html>

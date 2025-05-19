@@ -8,8 +8,8 @@
     <ul>
         {% for policy in policies %}
         <li>
-            <h2>{{ policy.title }}</h2> <!-- Access the 'title' field -->
-            <p>{{ policy.content }}</p> <!-- Access the 'content' field -->
+            <h2>Policy Title: {{ policy.title }}</h2>
+            <a href="{{ url_for('user_bp.preview_policy', policy_id=policy.id, username=username) }}" target="_blank">View PDF</a>
         </li>
         {% endfor %}
     </ul>

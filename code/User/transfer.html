@@ -6,7 +6,7 @@
 <body>
     <h1>Welcome {{ username }} to transfer!</h1>
     <form method="POST" action="{{ url_for('datauser_bp.process_payment', username=username) }}">
-        <h2>From Account (Source)</h2>
+        <h2>Out Bank</h2>
         <div>
             Bank: <input type="text" name="from_bank" required><br><br>
             Account Name: <input type="text" name="from_name" required><br><br>
@@ -14,7 +14,7 @@
             Password: <input type="password" name="password" required><br><br>
         </div>
         
-        <h2>To Account (Destination)</h2>
+        <h2>In Bank</h2>
         <div>
             Bank: <input type="text" name="to_bank" required><br><br>
             Account Name: <input type="text" name="to_name" required><br><br>

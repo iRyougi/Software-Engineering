@@ -6,28 +6,35 @@
 <body>
     <h1>Welcome {{ username }} to check student records!</h1>
     <h2>VIP operations:</h2>
-    <a href="{{ url_for('getstudentrecord', username=username) }}">Get student record</a><br>
-    <a href="{{ url_for('checkidentity', username=username) }}">Check identity</a><br>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Student Record No.</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for studentrecord in studentrecords %}
-                <tr>
-                    <td>{{ studentrecord.id }}</td>
-                    <td>{{ studentrecord.name }}</td>
-                    <td>{{ studentrecord.gender }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <a href="{{ url_for('datauser_bp.getstudentrecord', username=username) }}">Get student record</a><br>
+    <a href="{{ url_for('datauser_bp.checkidentity', username=username) }}">Check identity</a><br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Record No.</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Enrollment Year</th>
+                <th>Graduation Year</th>
+                <th>GPA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for studentrecord in studentrecords %}
+            <tr>
+                <td>{{ studentrecord.id }}</td>
+                <td>{{ studentrecord.name }}</td>
+                <td>{{ studentrecord.gender }}</td>
+                <td>{{ studentrecord.enrollment_year }}</td>
+                <td>{{ studentrecord.graduation_year }}</td>
+                <td>{{ "%.2f"|format(studentrecord.gpa) if studentrecord.gpa else '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <br>
     <h2>Otherwise:</h2>
-    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a><br>
 </body>
 </html>

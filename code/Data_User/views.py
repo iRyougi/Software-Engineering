@@ -158,14 +158,96 @@ def transfer(username):
 @datauser_bp.route('/process_payment/<string:username>', methods=['POST'])
 def process_payment(username):
     if request.method == 'POST':
-        amount = float(request.form['amount'])
-        account = request.form['account']
+        # 获取所有表单字段
+        from_bank = request.form['from_bank']
+        from_name = request.form['from_name']
+        from_account = request.form['from_account']
         password = request.form['password']
-        if pay_operation.payProcess(username, amount, account, password):
-            return render_template('paysuccess.html', username = username)
-        else:
-            return render_template('payfailure.html', username = username)
-    return redirect(url_for('transfer', username = username))
+        to_bank = request.form['to_bank']
+        to_name = request.form['to_name']
+        to_account = request.form['to_account']
+        amount = int(request.form['amount'])  # 假设金额为整数
+        
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        
+        try:
+            # 验证源账户信息是否完全匹配
+            source_query = """
+                SELECT * FROM bankaccount 
+                WHERE bank = %s AND account_name = %s AND account_number = %s AND password = %s
+            """
+            cursor.execute(source_query, (from_bank, from_name, from_account, password))
+            source_account = cursor.fetchone()
+            
+            if not source_account:
+                # 源账户验证失败
+                cursor.execute(
+                    "INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
+                    (username, f"Failed transfer: invalid source account information")
+                )
+                connection.commit()
+                cursor.close()
+                connection.close()
+                return render_template('payfailure.html', username=username, 
+                                      error="Invalid source account information. Please check bank, account name, account number and password.")
+            
+            # 验证目标账户信息是否存在且匹配
+            target_query = """
+                SELECT * FROM bankaccount 
+                WHERE bank = %s AND account_name = %s AND account_number = %s
+            """
+            cursor.execute(target_query, (to_bank, to_name, to_account))
+            target_account = cursor.fetchone()
+            
+            if not target_account:
+                # 目标账户验证失败
+                cursor.execute(
+                    "INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
+                    (username, f"Failed transfer: invalid destination account information")
+                )
+                connection.commit()
+                cursor.close()
+                connection.close()
+                return render_template('payfailure.html', username=username, 
+                                      error="Invalid destination account information. Please check bank, account name and account number.")
+            
+            # 所有验证都通过，记录转账信息
+            transfer_query = """
+                INSERT INTO transfer 
+                (from_bank, from_name, from_account, password, to_bank, to_name, to_account, amount) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            cursor.execute(transfer_query, (
+                from_bank, from_name, from_account, password, 
+                to_bank, to_name, to_account, amount
+            ))
+            
+            # 记录成功的转账活动
+            cursor.execute(
+                "INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
+                (username, f"Successful transfer of {amount} from {from_bank}/{from_account} to {to_bank}/{to_account}")
+            )
+            
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return render_template('paysuccess.html', username=username, 
+                                  amount=amount, from_account=from_account, to_account=to_account)
+            
+        except Exception as e:
+            connection.rollback()
+            # 记录错误
+            cursor.execute(
+                "INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
+                (username, f"Transfer error: {str(e)}")
+            )
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return render_template('payfailure.html', username=username, error=f"An error occurred: {str(e)}")
+    
+    return redirect(url_for('user_bp.transfer', username=username))
 
 @datauser_bp.route('/vipservice/<string:username>')
 def vipservice(username):

@@ -5,13 +5,13 @@
 </head>
 <body>
     <h1>Welcome {{ username }} to VIP Service!</h1>
-    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+    <p><a href="{{ url_for('datauser_bp.index') }}">Sign out</a></p>
     <h2>VIP User Options:</h2>
-    <a href="{{ url_for('browselog', username = username) }}">Browse LOG</a><br>
-    <a href="{{ url_for('browsebankaccount', username = username) }}">Browse Bank Account</a><br>
-    <a href="{{ url_for('browsethesis', username = username) }}">Browse Thesis</a><br>
-    <a href="{{ url_for('browsestudentrecord', username = username) }}">Browse Student Information</a><br>
+    <a href="{{ url_for('datauser_bp.browselog', username = username) }}">Browse LOG</a><br>
+    <a href="{{ url_for('datauser_bp.browsebankaccount', username = username) }}">Browse Bank Account</a><br>
+    <a href="{{ url_for('datauser_bp.browsethesis', username = username) }}">Browse Thesis</a><br>
+    <a href="{{ url_for('datauser_bp.browsestudentrecord', username = username) }}">Browse Student Information</a><br>
     <h2>Otherwise:</h2>
-    <a href="{{ url_for('datauser', username=username) }}">Back to Home</a>
+    <a href="{{ url_for('user_bp.datauser', username=username) }}">Back to Home</a>
 </body>
 </html>

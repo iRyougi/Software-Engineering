@@ -28,7 +28,7 @@
             <td>{{ t.author }}</td>
             <td>{{ t.title }}</td>
             <td>
-                <a href="{{ url_for('download_thesis', title=t.id) }}" download>
+                <a href="{{ url_for('datauser_bp.download_thesis', title=t.id) }}" download>
                     <button>Download PDF</button>
                 </a>
             </td>
@@ -37,6 +37,6 @@
     </table>
     {% endif %}
     
-    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a><br>
 </body>
 </html>

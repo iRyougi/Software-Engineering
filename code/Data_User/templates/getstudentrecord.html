@@ -22,23 +22,17 @@
         <h3>Result:</h3>
         <table border="1">
             <tr>
-                <th>ID</th>
                 <th>Name</th>
-                <th>Gender</th>
-                <th>Date of Birth</th>
                 <th>Enrollment Year</th>
                 <th>Graduation Year</th>
                 <th>GPA</th>
             </tr>
             {% for record in studentrecords %}
             <tr>
-                <td>{{ record.id }}</td>
                 <td>{{ record.name }}</td>
-                <td>{{ record.gender }}</td>
-                <td>{{ record.dateofbirth }}</td>
-                <td>{{ record.enrollmentyear }}</td>
-                <td>{{ record.graduationyear }}</td>
-                <td>{{ record.gpa }}</td>
+                <td>{{ record.enrollment_year }}</td>
+                <td>{{ record.graduation_year }}</td>
+                <td>{{ "%.2f"|format(record.gpa) if record.gpa else ''  }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -47,6 +41,6 @@
             <p>No matching records found.</p>
         {% endif %}
     {% endif %}
-    <a href="{{ url_for('vipservice', username=username) }}">Back to VIP Service</a><br>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a><br>
 </body>
 </html>

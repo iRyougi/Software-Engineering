@@ -67,22 +67,43 @@ class DataUser():
     connection.close()
     return records
   
-  def checkIdentity(self, username, student_id, name, dateofbirth):
-    connection = self.get_db_connection()
-    cursor = connection.cursor(dictionary=True)
-    query = """
-        SELECT * FROM studentrecord 
-        WHERE id = %s AND name = %s AND dateofbirth = %s
-    """
-    cursor.execute(query, (student_id, name, dateofbirth))
-    record = cursor.fetchone()
-    action = f"Check identity with ID {student_id}, Name {name}, DoB {dateofbirth}"
-    cursor.execute("INSERT INTO activityrecord (username, action) VALUES (%s, %s)", 
-                  (username, action))
-    connection.commit()
-    cursor.close()
-    connection.close()
-    return record is not None
+  def checkIdentity(self, username, student_id, name, photo=None):
+      connection = self.get_db_connection()
+      cursor = connection.cursor(dictionary=True)
+
+      query = """
+          SELECT * FROM studentrecord 
+          WHERE id = %s AND name = %s
+      """
+      cursor.execute(query, (student_id, name))
+      record = cursor.fetchone()
+      
+      is_verified = False
+      
+      if record:
+          if photo and hasattr(photo, 'filename'):
+              student_name_simplified = name.lower().replace(" ", "_")
+              filename_lower = photo.filename.lower()
+              filename_base = os.path.splitext(filename_lower)[0] 
+              
+              if student_name_simplified in filename_base or filename_base in student_name_simplified:
+                  is_verified = True
+                  action = f"Identity verified for ID {student_id}, Name {name}, Photo matched: {photo.filename}"
+              else:
+                  action = f"Identity check failed for ID {student_id}, Name {name}, Photo didn't match: {photo.filename}"
+          else:
+              action = f"Identity check incomplete for ID {student_id}, Name {name}, No photo provided"
+      else:
+          action = f"Identity check failed for ID {student_id}, Name {name}, Student not found in database"
+          if photo and hasattr(photo, 'filename'):
+              action += f", Photo provided: {photo.filename}"
+
+      cursor.execute("INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
+                    (username, action))     
+      connection.commit()
+      cursor.close()
+      connection.close()  
+      return is_verified
 
   def browseThesis(self, username):
     connection = self.get_db_connection()
