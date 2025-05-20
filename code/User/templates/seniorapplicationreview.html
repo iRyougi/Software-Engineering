@@ -91,7 +91,7 @@
         // Accept application
         function acceptApplication() {
             if (currentShortname) {
-                fetch(`/senioraccept_application/${currentShortname}`, {
+                fetch(`/user/senioraccept_application/${currentShortname}`, {
                     method: 'POST'
                 }).then(() => {
                     location.reload(); // Reload the page after the action
@@ -102,7 +102,7 @@
         // Reject application
         function rejectApplication() {
             if (currentShortname) {
-                fetch(`/reject_application/${currentShortname}`, {
+                fetch(`/user/reject_application/${currentShortname}`, {
                     method: 'POST'
                 }).then(() => {
                     location.reload(); // Reload the page after the action
@@ -144,7 +144,7 @@
 
     <!-- Footer -->
     <footer>
-        <p><a href="{{ url_for('Senior_admin', username=username) }}">Return to Senior E_admin User Page</a></p>
+        <p><a href="{{ url_for('user_bp.Senior_admin', username=username) }}">Return to Senior E_admin User Page</a></p>
     </footer>
 </body>
 </html>

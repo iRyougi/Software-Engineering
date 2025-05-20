@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Data User Login</h1>
+    <form method="POST">
+        Username: <input type="text" name="username" required><br><br>
+        Password: <input type="password" name="password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+    <br>
+
+    <hr>
+    <footer>
+        <small>
+            Go to <a href="{{ url_for('service_bp.login') }}">Data Consumer and Provider Login Page</a>
+        </small>
+        <br>
+        <small>
+            Go to <a href="{{ url_for('user_bp.home') }}">Admins and Convener Home Page</a>
+        </small>
+    </footer>
+</body>
+</html>

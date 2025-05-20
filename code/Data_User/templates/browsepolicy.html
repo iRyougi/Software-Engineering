@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Policies</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check policies!</h1>
+    <ul>
+        {% for policy in policies %}
+        <li>
+            <h2>{{ policy.title }}</h2>
+            <a href="{{ url_for('user_bp.preview_policy', policy_id=policy.id, username=username) }}" target="_blank">View PDF</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="{{ url_for('user_bp.datauser', username=username) }}">Back to Home</a>
+</body>
+</html>

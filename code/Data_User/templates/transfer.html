@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transfer</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to transfer!</h1>
+    <form method="POST" action="{{ url_for('datauser_bp.process_payment', username=username) }}">
+        <h2>From Account (Source)</h2>
+        <div>
+            Bank: <input type="text" name="from_bank" required><br><br>
+            Account Name: <input type="text" name="from_name" required><br><br>
+            Account Number: <input type="text" name="from_account" required><br><br>
+            Password: <input type="password" name="password" required><br><br>
+        </div>
+        
+        <h2>To Account (Destination)</h2>
+        <div>
+            Bank: <input type="text" name="to_bank" required><br><br>
+            Account Name: <input type="text" name="to_name" required><br><br>
+            Account Number: <input type="text" name="to_account" required><br><br>
+        </div>
+        
+        <h2>Transfer Details</h2>
+        <div>
+            Amount: <input type="number" name="amount" min="0.01" step="0.01" required>￥<br><br>
+        </div>
+        
+        <button type="submit">Transfer</button>
+    </form>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    {% if result is not none %}
+        <h2>Transfer Result: {{ result }}</h2>
+    {% endif %}
+    
+    <br><br>
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a>
+</body>
+</html>

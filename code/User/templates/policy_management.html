@@ -10,7 +10,7 @@
 </head>
 <body>
    <h1>Policy Management (E‑Admin: {{ username }})</h1>
-   <a href="{{ url_for('add_policy', username=username) }}">Add New Policy</a>
+   <a href="{{ url_for('user_bp.add_policy', username=username) }}">Add New Policy</a>
    <table>
          <tr>
              <th>ID</th>
@@ -23,19 +23,19 @@
              <td>{{ policy.id }}</td>
              <td>{{ policy.title }}</td>
              <td>
-                <a href="{{ url_for('preview_policy', policy_id=policy.id, username=username) }}" target="_blank">
+                <a href="{{ url_for('user_bp.preview_policy', policy_id=policy.id, username=username) }}" target="_blank">
                     Preview PDF
                 </a>
              </td>
              <td>
-                <a href="{{ url_for('update_policy', policy_id=policy.id, username=username) }}">Edit</a>
-                <form action="{{ url_for('delete_policy', policy_id=policy.id, username=username) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('user_bp.update_policy', policy_id=policy.id, username=username) }}">Edit</a>
+                <form action="{{ url_for('user_bp.delete_policy', policy_id=policy.id, username=username) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this policy?');">Delete</button>
                 </form>
              </td>
          </tr>
          {% endfor %}
    </table>
-   <p><a href="{{ url_for('E_admin', username=username) }}">Back to E_admin Panel</a></p>
+   <p><a href="{{ url_for('user_bp.E_admin', username=username) }}">Back to E_admin Panel</a></p>
 </body>
 </html>

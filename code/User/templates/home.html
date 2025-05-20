@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title>Admin and Convener Home</title>
 </head>
 <body>
-    <h1>Home</h1>
-    <p><a href="{{ url_for('index') }}">Proceed to Login Page</a></p>
-    <p><a href="{{ url_for('registerApplication') }}">Register an Organization(Convener Only)</a></p>
+    <h1>Admin and Convener Home</h1>
+    <p><a href="{{ url_for('user_bp.adminindex') }}">Proceed to Login Page</a></p>
+    <p><a href="{{ url_for('user_bp.registerApplication') }}">Register an Organization(Convener Only)</a></p>
+
+    <hr>
+    <footer>
+        <small>
+            Go to <a href="{{ url_for('service_bp.login') }}">Data Consumer and Provider Login Page</a>
+        </small>
+        <br>
+        <small>
+            Go to <a href="{{ url_for('datauser_bp.index') }}">Data User Login Page</a>
+        </small>
+    </footer>
 </body>
 </html>

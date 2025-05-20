@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Register Application for Organization</h1>
-    <form action="{{ url_for('registerApplication') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ url_for('user_bp.registerApplication') }}" method="POST" enctype="multipart/form-data">
 
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" required><br><br>
@@ -26,7 +26,7 @@
       <button type="submit">Submit</button>
     </form>
     <br>
-    <a href="{{ url_for('home') }}">Back to main page</a>
+    <a href="{{ url_for('user_bp.home') }}">Back to main page</a>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -47,7 +47,7 @@
                 return;
             }
 
-            fetch('{{ url_for("send_verification_code") }}', {
+            fetch('{{ url_for("user_bp.send_verification_code") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

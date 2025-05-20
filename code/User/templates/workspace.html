@@ -6,27 +6,27 @@
 <body>
     <h1>{{ organization }} Workspace</h1>
     {% if workspace.course_sharing and user_level >= 1 %}
-        <a href="{{ url_for('course_info_sharing', organization=organization) }}">Course Info Sharing</a><br>
+        <a href="{{ url_for('service_bp.course_info_sharing', organization=organization) }}">Course Info Sharing</a><br>
     {% elif workspace.course_sharing %}
         <span>Course Info Sharing (No Access)</span><br>
     {% endif %}
 
     {% if workspace.thesis_sharing and user_level >= 1 %}
-        <a href="{{ url_for('thesis_sharing', organization=organization) }}">Thesis Sharing ({{ workspace.thesis_price }} RMB)</a><br>
+        <a href="{{ url_for('service_bp.thesis_sharing', organization=organization) }}">Thesis Sharing ({{ workspace.thesis_price }} RMB)</a><br>
     {% elif workspace.thesis_sharing %}
         <span>Thesis Sharing (No Access)</span><br>
     {% endif %}
 
     {% if workspace.id_authentication and user_level >= 2 %}
-        <a href="{{ url_for('student_id_authentication', organization=organization) }}">Student ID Authentication ({{ workspace.id_price }} RMB)</a><br>
+        <a href="{{ url_for('service_bp.student_id_authentication', organization=organization) }}">Student ID Authentication ({{ workspace.id_price }} RMB)</a><br>
     {% elif workspace.id_authentication %}
         <span>Student ID Authentication (No Access)</span><br>
     {% endif %}
 
     {% if user_level >= 2 %}
-        <a href="{{ url_for('student_gpa_access', organization=organization) }}">Student GPA Record Access</a><br>
+        <a href="{{ url_for('service_bp.student_gpa_access', organization=organization) }}">Student GPA Record Access</a><br>
     {% endif %}
 
-    <p><a href="{{ url_for('data_consumer', username=username) }}">Back to Search</a></p>
+    <p><a href="{{ url_for('service_bp.data_consumer', username=username) }}">Back to Search</a></p>
 </body>
 </html>

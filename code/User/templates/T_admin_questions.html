@@ -52,7 +52,7 @@
             <td>{{ question.response or 'No response yet' }}</td>
             <td>
                 {% if not question.response_time %}
-                <form class="answer-form" action="{{ url_for('answer_question', question_id=question.question_id) }}" method="POST">
+                <form class="answer-form" action="{{ url_for('user_bp.answer_question', question_id=question.question_id) }}" method="POST">
                     <input type="hidden" name="username" value="{{ username }}">
                     <textarea name="response" required></textarea>
                     <button type="submit">Submit Response</button>
@@ -62,6 +62,6 @@
         </tr>
         {% endfor %}
     </table>
-    <p><a href="{{ url_for('T_admin', username=username) }}">Back to Admin Panel</a></p>
+    <p><a href="{{ url_for('user_bp.T_admin', username=username) }}">Back to Admin Panel</a></p>
 </body>
 </html>

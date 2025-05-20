@@ -2,20 +2,96 @@
 <html>
 <head>
     <title>O_convener</title>
+    <style>
+        .email-form {
+            width: 700px;
+            margin: 0;
+        }
+        .email-form label {
+            display: inline-block;
+            width: 120px;
+            text-align: left;
+            vertical-align: top;
+            margin-bottom: 8px;
+        }
+        .email-form input, .email-form textarea {
+            width: 400px;
+            margin-bottom: 10px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .email-form textarea {
+            resize: vertical;
+        }
+        .email-form button {
+            margin-left: 120px;
+        }
+        .inbox-table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .inbox-table th, .inbox-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .inbox-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome {{ username }} to O_convener User Interface!</h1>
 
-    <a href="{{ url_for('upload_members_page', username=username) }}">Upload Members via Excel</a><br>
+    <a href="{{ url_for('user_bp.upload_members_page', username=username) }}">Upload Members via Excel</a><br>
+    <a href="{{ url_for('user_bp.manage_members', username=username) }}">Manage Users</a><br>
+    <a href="{{ url_for('user_bp.banking_info', username=username) }}">Manage Banking Info</a><br>
+    <a href="{{ url_for('user_bp.o_convener_logs', username=username) }}">View Organization Activity Logs</a><br>
+    <a href="{{ url_for('user_bp.manage_workspace', username=username) }}">Manage organization workspace</a><br>
+    <p><a href="{{ url_for('user_bp.adminindex') }}">Sign out</a></p>
 
-    <a href="{{ url_for('manage_members', username=username) }}">Manage Users</a><br>
+    <hr>
+    <h2>Send Email</h2>
+    <form class="email-form" action="{{ url_for('user_bp.send_email', username=username) }}" method="post">
+        <label for="recipient">Recipient Email:</label>
+        <input type="email" id="recipient" name="recipient" required><br>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required><br>
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" rows="5" required></textarea><br>
+        <button type="submit">Send</button>
+    </form>
+    {% if email_success %}
+        <p style="color:green;">{{ email_success }}</p>
+    {% elif email_error %}
+        <p style="color:red;">{{ email_error }}</p>
+    {% endif %}
 
-    <a href="{{ url_for('banking_info', username=username) }}">Manage Banking Info</a><br>
-
-    <a href="{{ url_for('o_convener_logs', username=username) }}">View Organization Activity Logs</a><br>
-
-    <a href="{{ url_for('manage_workspace', username=username) }}">Manage organization workspace</a><br>
-
-    <p><a href="{{ url_for('index') }}">Sign out</a></p>
+    <hr>
+    <h2>Inbox</h2>
+    {% if inbox_emails %}
+    <table class="inbox-table">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Body</th>
+                <th>Sent At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for email in inbox_emails %}
+            <tr>
+                <td>{{ email.sender }}</td>
+                <td>{{ email.subject }}</td>
+                <td>{{ email.body }}</td>
+                <td>{{ email.sent_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No emails found.</p>
+    {% endif %}
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Account Validity</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check account validity!</h1>
+    
+    <form method="POST">
+        <div>
+            <label>Bank:</label>
+            <input type="text" name="bank" required>
+        </div>
+        <div>
+            <label>Account Name:</label>
+            <input type="text" name="account_name" required>
+        </div>
+        <div>
+            <label>Account Number:</label>
+            <input type="text" name="account_number" required>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+        </div>
+        
+        <button type="submit">Verify Account</button>
+    </form>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    {% if result is not none %}
+        <h2>Verification Result: {{ result }}</h2>
+        {% if result == 'success' %}
+            <p>Account verification was successful.</p>
+        {% else %}
+            <p>Account verification failed. Please check your information and try again.</p>
+        {% endif %}
+    {% endif %}
+    
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a>
+</body>
+</html>

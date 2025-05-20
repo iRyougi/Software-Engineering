@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Identity Authentication</title>
+</head>
+<body>
+    <h1>Welcome {{ username }} to check students' identity authentication!</h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <div>
+            <label>Student ID:</label>
+            <input type="text" name="student_id" required>
+        </div>
+        
+        <div>
+            <label>Student Name:</label>
+            <input type="text" name="name" required>
+        </div>
+        
+        <div>
+            <label>Student Photo:</label>
+            <input type="file" name="photo" accept="image/*" required>
+        </div>
+        
+        <button type="submit">Verify Identity</button>
+    </form>
+    
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    {% if result is not none %}
+        <h2>Authentication Result: {{ result }}</h2>
+    {% endif %}
+    
+    <a href="{{ url_for('datauser_bp.vipservice', username=username) }}">Back to VIP Service</a>
+</body>
+</html>

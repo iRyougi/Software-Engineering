@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="login-box">
-        <h2>Admin Login</h2>
+        <h2>Data Consumer and Provider Login</h2>
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
@@ -23,5 +23,16 @@
             <button type="submit">Login</button>
         </form>
     </div>
+
+    <hr>
+    <footer>
+        <small>
+            Go to <a href="{{ url_for('user_bp.home') }}">Admins and Convener Home Page</a>
+        </small>
+        <br>
+        <small>
+            Go to <a href="{{ url_for('datauser_bp.index') }}">Data User Login Page</a>
+        </small>
+    </footer>
 </body>
 </html>
