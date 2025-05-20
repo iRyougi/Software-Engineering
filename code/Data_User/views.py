@@ -125,14 +125,14 @@ def checkidentity(username):
     if request.method == 'POST':
         student_id = request.form.get('student_id')
         name = request.form.get('name')
-        dob = request.form.get('dob')
+        photo = request.files.get('photo')  # 从请求中获取上传的照片
         try:
             student_id = int(student_id)
         except ValueError:
             return render_template('checkidentity.html', 
                                  username=username, 
                                  error="ID must be a number")
-        exists = data_operation.checkIdentity(username, student_id, name, dob)
+        exists = data_operation.checkIdentity(username, student_id, name, photo)
         result = "Yes" if exists else "No"
     return render_template('checkidentity.html', 
                          username=username, 

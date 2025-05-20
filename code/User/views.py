@@ -371,14 +371,13 @@ def browsepolicy(username):
     policies = data_operation.browsePolicy()
     return render_template('browsepolicy.html', policies=policies, username = username)
 
-@user_bp.route('/seekhelp/<string:username>', methods=['GET', 'POST'])
+@user_bp.route('/seekhelp/<string:username>')
 def seekhelp(username):
-    if request.method == 'POST':
-        question = request.form['question']
-        data_operation.seekHelp(username, question)
-        return render_template('sendsuccess.html', username = username)
-    # Redirect to a success page
     return render_template('seekhelp.html', username = username)
+
+@user_bp.route('/sendsuccess/<string:username>')
+def sendsuccess(username):
+    return render_template('sendsuccess.html', username = username)
 
 @user_bp.route('/payment/<string:username>')
 def payment(username):

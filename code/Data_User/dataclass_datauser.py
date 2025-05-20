@@ -1,4 +1,5 @@
 import mysql.connector
+import os
 
 class DataUser():
   def __init__(self, db_config):
@@ -70,7 +71,8 @@ class DataUser():
   def checkIdentity(self, username, student_id, name, photo=None):
       connection = self.get_db_connection()
       cursor = connection.cursor(dictionary=True)
-
+      
+      # 首先验证学生ID和姓名是否存在
       query = """
           SELECT * FROM studentrecord 
           WHERE id = %s AND name = %s
@@ -81,28 +83,39 @@ class DataUser():
       is_verified = False
       
       if record:
+          # 学生记录存在，检查照片文件名
           if photo and hasattr(photo, 'filename'):
-              student_name_simplified = name.lower().replace(" ", "_")
-              filename_lower = photo.filename.lower()
-              filename_base = os.path.splitext(filename_lower)[0] 
-              
-              if student_name_simplified in filename_base or filename_base in student_name_simplified:
-                  is_verified = True
-                  action = f"Identity verified for ID {student_id}, Name {name}, Photo matched: {photo.filename}"
-              else:
-                  action = f"Identity check failed for ID {student_id}, Name {name}, Photo didn't match: {photo.filename}"
+              try:
+                  # 统一处理名字和文件名：移除所有空格和下划线
+                  simple_name = name.lower().replace(" ", "").replace("_", "")
+                  simple_filename = photo.filename.lower().replace(" ", "").replace("_", "")
+                  simple_filename = os.path.splitext(simple_filename)[0]  # 移除扩展名
+                  
+                  # 使用包含关系进行匹配
+                  if simple_name == simple_filename or simple_name in simple_filename or simple_filename in simple_name:
+                      is_verified = True
+                      action = f"Identity verified for ID {student_id}, Name {name}, Photo matched: {photo.filename}"
+                  else:
+                      action = f"Identity check failed for ID {student_id}, Name {name}, Photo didn't match: {photo.filename}"
+              except Exception as e:
+                  action = f"Error checking identity for ID {student_id}, Name {name}: {str(e)}"
           else:
+              # 没有提供照片
               action = f"Identity check incomplete for ID {student_id}, Name {name}, No photo provided"
       else:
+          # 学生记录不存在
           action = f"Identity check failed for ID {student_id}, Name {name}, Student not found in database"
           if photo and hasattr(photo, 'filename'):
               action += f", Photo provided: {photo.filename}"
-
+      
+      # 记录活动
       cursor.execute("INSERT INTO activityrecord (username, action) VALUES (%s, %s)",
-                    (username, action))     
+                    (username, action))
+      
       connection.commit()
       cursor.close()
-      connection.close()  
+      connection.close()
+      
       return is_verified
 
   def browseThesis(self, username):
